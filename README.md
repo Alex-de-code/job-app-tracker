@@ -1,6 +1,6 @@
 # Job Application Tracker
 
-A simple, no distraction tracker to for staying organized during job search with some great quality of life features.
+A simple, no distraction tracker for staying organized during job search with some great quality of life features.
 
 Currently building out features + functionality.
 
