@@ -14,6 +14,8 @@ const Table = () => {
 
   // TODO: Create Form component that's seperate from table.jsx and jobCard.jsx, the submit bttn will trigger the addjobapp even handler, which we'll then put into useEffect
 
+  // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
+
   return (
     <>
       <div className="flex flex-row p-10">
