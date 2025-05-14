@@ -1,16 +1,23 @@
 import JobCard from "./JobCard.jsx";
 import { MdAddBox } from "react-icons/md";
 import { useEffect, useState } from "react";
+import JobAppForm from "./JobAppForm.jsx";
 
 const Table = () => {
+  // need to create dummy data array
   const [jobApps, setJobApps] = useState([]); // store all applications
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // this will fire for the onClick event of the submit bttn after form submission
   const AddJobApp = () => {
-    // setJobApps("test");
+    setIsModalOpen(true);
   };
+
   // this useEffect will refresh/update the jobApps array
-  //   useEffect(() => {}, []);
+  // useEffect(() => {}, []);
+
+  // useEffect(() => {}, [isModalOpen]);
 
   // TODO: Create Form component that's seperate from table.jsx and jobCard.jsx, the submit bttn will trigger the addjobapp even handler, which we'll then put into useEffect
 
@@ -21,11 +28,7 @@ const Table = () => {
       <div className="flex flex-row p-10">
         <div className="mr-1 mt-1 hover:opacity-75">
           {/* this will open the form for users to input a new job application */}
-          <button
-            onClick={() => {
-              console.log("Clicked Add Job Application");
-            }}
-          >
+          <button onClick={AddJobApp}>
             <MdAddBox className="size-9" />
           </button>
         </div>
@@ -54,6 +57,7 @@ const Table = () => {
               <JobCard />
             </tbody>
           </table>
+          <JobAppForm isModalOpen={isModalOpen} />
         </div>
       </div>
     </>
