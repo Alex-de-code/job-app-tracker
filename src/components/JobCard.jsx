@@ -28,6 +28,20 @@ const JobCard = ({ jobApps }) => {
         };
     }
   };
+
+  const formatDate = (timestamp) => {
+    return new Date(timestamp)
+      .toLocaleString("en-US", {
+        month: "2-digit",
+        day: "2-digit",
+        year: "2-digit",
+        // hour: "2-digit",
+        // minute: "2-digit",
+        // hour12: false,
+      })
+      .replace(/,/g, "")
+      .replace(/\//g, "-");
+  };
   return (
     <>
       {/* Remember: Change hard coded data to variables based on schema design in Table.jsx + form component */}
@@ -50,7 +64,7 @@ const JobCard = ({ jobApps }) => {
                 {status}
               </div>
             </td>
-            <td className="py-2 px-3 text-sm">{dateAdded}</td>
+            <td className="py-2 px-3 text-sm">{formatDate(dateAdded)}</td>
             <td className="py-2 px-3">
               <div className="flex flex-row items-center justify-around">
                 {" "}
