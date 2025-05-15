@@ -3,6 +3,31 @@ import { MdOutlineEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 
 const JobCard = ({ jobApps }) => {
+  const getStatusTagColor = (status) => {
+    switch (status) {
+      case "Applied":
+        return {
+          backgroundColor: "bg-slate-200",
+        };
+      case "Interviewing":
+        return {
+          backgroundColor: "bg-yellow-200",
+        };
+      case "Accepted":
+        return {
+          backgroundColor: "bg-green-200",
+        };
+      case "Denied":
+        return {
+          backgroundColor: "bg-red-200",
+        };
+
+      default:
+        return {
+          backgroundColor: "bg-gray-200",
+        };
+    }
+  };
   return (
     <>
       {/* Remember: Change hard coded data to variables based on schema design in Table.jsx + form component */}
@@ -17,7 +42,11 @@ const JobCard = ({ jobApps }) => {
             {/* be cool for user to click on application status and toggle it that way or click through a slider animation */}
             <td className="py-2 px-3 text-sm">
               {" "}
-              <div className="bg-yellow-200 rounded-lg py-1 px-2 shadow hover:opacity-75 text-center">
+              <div
+                className={`rounded-lg py-1 px-2 shadow hover:opacity-75 text-center ${
+                  getStatusTagColor(status).backgroundColor
+                }`}
+              >
                 {status}
               </div>
             </td>
