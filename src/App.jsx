@@ -5,7 +5,7 @@ import Table from "./components/Table.jsx";
 function App() {
   return (
     <>
-      <div className="min-h-screen bg-slate-300">
+      <div className="min-h-screen bg-gray-200">
         <Table />
       </div>
     </>
