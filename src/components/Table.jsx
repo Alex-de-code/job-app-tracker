@@ -5,7 +5,29 @@ import JobAppForm from "./JobAppForm.jsx";
 
 const Table = () => {
   // need to create dummy data array
-  const [jobApps, setJobApps] = useState([]); // store all applications
+  const [jobApps, setJobApps] = useState([
+    {
+      companyTitle: "Blackheart",
+      role: "Software Engineer",
+      status: "Denied",
+      description: "Front end dev work",
+      dateAdded: "22-04-23",
+    },
+    {
+      companyTitle: "Figma",
+      role: "UI/UX Researcher",
+      status: "Interviewing",
+      description: "Component designing",
+      dateAdded: "04-05-25",
+    },
+    {
+      companyTitle: "Coinbase",
+      role: "Backend Engineer",
+      status: "Applied",
+      description: "API Design and testing",
+      dateAdded: "05-13-25",
+    },
+  ]); // store all applications
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -54,7 +76,7 @@ const Table = () => {
             </thead>
             <tbody>
               {/* will need to map through an array of job apps, and pass through the props to jobCard component */}
-              <JobCard />
+              <JobCard jobApps={jobApps} />
             </tbody>
           </table>
           <JobAppForm isModalOpen={isModalOpen} />
