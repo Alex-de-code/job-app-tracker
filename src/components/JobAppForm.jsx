@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const JobAppForm = ({ isModalOpen }) => {
   // SHould set this up like a modal pop up
   // think Z index overlayed atop the intial table
@@ -5,6 +7,16 @@ const JobAppForm = ({ isModalOpen }) => {
   // need to pass down a prop from parent component in this case, Table.jsx that turns modal visibility for this form on/off
 
   // need to send form submission to update dummy data array
+
+  //state for form inputs
+  const [newJobApp, setNewJobApp] = useState({
+    companyTitle: "",
+    role: "",
+    description: "",
+    status: "",
+    dataAdded: null, // set this up so it automatically saves date user added a job app
+  });
+
   //update logic for handle submit
   const handleSubmit = () => {};
 

@@ -7,7 +7,7 @@ const JobCard = ({ jobApps }) => {
     switch (status) {
       case "Applied":
         return {
-          backgroundColor: "bg-slate-200",
+          backgroundColor: "bg-slate-300",
         };
       case "Interviewing":
         return {
@@ -15,16 +15,16 @@ const JobCard = ({ jobApps }) => {
         };
       case "Accepted":
         return {
-          backgroundColor: "bg-green-200",
+          backgroundColor: "bg-green-300",
         };
       case "Denied":
         return {
-          backgroundColor: "bg-red-200",
+          backgroundColor: "bg-red-300",
         };
 
       default:
         return {
-          backgroundColor: "bg-gray-200",
+          backgroundColor: "bg-gray-300",
         };
     }
   };
