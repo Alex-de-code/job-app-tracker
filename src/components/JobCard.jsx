@@ -49,7 +49,7 @@ const JobCard = ({ jobApps }) => {
 
       {jobApps.map(
         ({ id, companyTitle, role, description, status, dateAdded }) => (
-          <tr key={id}>
+          <tr key={id} className="hover:bg-slate-200">
             <td className="py-2 px-3 text-sm">{companyTitle}</td>
             <td className="py-2 px-3 text-sm">{role}</td>
             <td className="py-2 px-3 text-sm">{description}</td>
@@ -68,7 +68,7 @@ const JobCard = ({ jobApps }) => {
             <td className="py-2 px-3">
               <div className="flex flex-row items-center justify-around">
                 {" "}
-                <div className="hover:opacity-75">
+                <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
                   <button
                     onClick={() => {
                       console.log("Clicked Edit Job Application");
@@ -77,7 +77,7 @@ const JobCard = ({ jobApps }) => {
                     <MdOutlineEdit className="size-5.5" />
                   </button>
                 </div>
-                <div className="hover:opacity-75">
+                <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
                   <button
                     onClick={() => {
                       console.log("Clicked Delete Job Application");

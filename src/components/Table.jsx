@@ -59,10 +59,10 @@ const Table = () => {
   return (
     <>
       <div className="flex flex-row p-10">
-        <div className="mr-1 mt-1 hover:opacity-75">
+        <div className="mr-1 mt-1 ">
           {/* this will open the form for users to input a new job application */}
           <button onClick={() => setIsModalOpen(true)}>
-            <MdAddBox className="size-9" />
+            <MdAddBox className="size-9 hover:opacity-75" />
           </button>
         </div>
         <div className="">
