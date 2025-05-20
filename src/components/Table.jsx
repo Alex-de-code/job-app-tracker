@@ -35,12 +35,20 @@ const Table = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // this will fire for the onClick event of the submit bttn after form submission
-  const AddJobApp = () => {
-    setIsModalOpen(true);
+  const AddNewJobApp = (newJob) => {
+    const maxId =
+      jobApps.length > 0 ? Math.max(...jobApps.map((job) => job.id)) : 0; // this method works even if jobs get deleted
+
+    const newJobApp = {
+      ...newJob,
+      id: maxId + 1,
+      dateAdded: new Date().getTime(),
+    };
+    setJobApps((prev) => [...prev, newJobApp]);
   };
 
   // this useEffect will refresh/update the jobApps array
-  // useEffect(() => {}, []);
+  useEffect(() => {}, [jobApps]);
 
   // useEffect(() => {}, [isModalOpen]);
 
@@ -53,7 +61,7 @@ const Table = () => {
       <div className="flex flex-row p-10">
         <div className="mr-1 mt-1 hover:opacity-75">
           {/* this will open the form for users to input a new job application */}
-          <button onClick={AddJobApp}>
+          <button onClick={() => setIsModalOpen(true)}>
             <MdAddBox className="size-9" />
           </button>
         </div>
@@ -82,7 +90,11 @@ const Table = () => {
               <JobCard jobApps={jobApps} />
             </tbody>
           </table>
-          <JobAppForm isModalOpen={isModalOpen} />
+          <JobAppForm
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
+            AddNewJobApp={AddNewJobApp}
+          />
         </div>
       </div>
     </>

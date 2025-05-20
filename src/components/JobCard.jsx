@@ -47,9 +47,9 @@ const JobCard = ({ jobApps }) => {
       {/* Remember: Change hard coded data to variables based on schema design in Table.jsx + form component */}
       {/* Remember: to make the table scrollable, so the component doesn't stretch the page infinitely */}
 
-      {jobApps.map(({ companyTitle, role, description, status, dateAdded }) => (
-        <>
-          <tr>
+      {jobApps.map(
+        ({ id, companyTitle, role, description, status, dateAdded }) => (
+          <tr key={id}>
             <td className="py-2 px-3 text-sm">{companyTitle}</td>
             <td className="py-2 px-3 text-sm">{role}</td>
             <td className="py-2 px-3 text-sm">{description}</td>
@@ -89,8 +89,8 @@ const JobCard = ({ jobApps }) => {
               </div>
             </td>
           </tr>
-        </>
-      ))}
+        )
+      )}
     </>
   );
 };
