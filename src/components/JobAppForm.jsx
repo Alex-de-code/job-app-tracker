@@ -1,6 +1,17 @@
 import { useState } from "react";
 
-const JobAppForm = ({ isModalOpen, setIsModalOpen, AddNewJobApp }) => {
+const JobAppForm = ({
+  isModalOpen,
+  setIsModalOpen,
+  newJobApp,
+  setNewJobApp,
+  AddNewJobApp,
+  idEditing,
+  updateJobApp,
+  jobApps,
+  currentEditid,
+  setCurrentEditId,
+}) => {
   // SHould set this up like a modal pop up
   // think Z index overlayed atop the intial table
 
@@ -8,18 +19,19 @@ const JobAppForm = ({ isModalOpen, setIsModalOpen, AddNewJobApp }) => {
 
   // need to send form submission to update dummy data array
 
-  //state for form inputs
-  const [newJobApp, setNewJobApp] = useState({
-    companyTitle: "",
-    role: "",
-    description: "",
-    status: "",
-    dataAdded: new Date(), // set this up so it automatically saves date user added a job app
-  });
+  const modalVisibility = (isModalOpen) => {
+    return isModalOpen ? "visible" : "invisible";
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
     setNewJobApp((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+    setIsEditing(false);
+    setCurrentEditId(null);
   };
 
   //update logic for handle submit
@@ -37,7 +49,11 @@ const JobAppForm = ({ isModalOpen, setIsModalOpen, AddNewJobApp }) => {
       return;
     }
 
-    AddNewJobApp(newJobApp);
+    if (isEditing) {
+      updateJobApp(currentEditid);
+    } else {
+      AddNewJobApp(newJobApp);
+    }
 
     // reset form
     setNewJobApp({
@@ -50,14 +66,6 @@ const JobAppForm = ({ isModalOpen, setIsModalOpen, AddNewJobApp }) => {
 
     // Close modal
     setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const modalVisibility = (isModalOpen) => {
-    return isModalOpen ? "visible" : "invisible";
   };
 
   return (

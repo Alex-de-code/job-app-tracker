@@ -3,36 +3,22 @@ import { MdAddBox } from "react-icons/md";
 import { useEffect, useState } from "react";
 import JobAppForm from "./JobAppForm.jsx";
 
-const Table = () => {
-  // need to create dummy data array
-  const [jobApps, setJobApps] = useState([
-    {
-      id: 1,
-      companyTitle: "Blackheart",
-      role: "Software Engineer",
-      status: "Denied",
-      description: "Front end dev work",
-      dateAdded: new Date("2023-02-04T14:30").getTime(), // will serve as timestamp
-    },
-    {
-      id: 2,
-      companyTitle: "Figma",
-      role: "UI/UX Researcher",
-      status: "Interviewing",
-      description: "Component designing",
-      dateAdded: new Date("2025-04-05T09:15").getTime(),
-    },
-    {
-      id: 3,
-      companyTitle: "Coinbase",
-      role: "Backend Engineer",
-      status: "Applied",
-      description: "API Design and testing",
-      dateAdded: new Date("2025-06-05T01:15").getTime(),
-    },
-  ]); // store all applications
-
+const Table = ({ jobApps, setJobApps }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  //state for form inputs
+  const [newJobApp, setNewJobApp] = useState({
+    companyTitle: "",
+    role: "",
+    description: "",
+    status: "",
+    dataAdded: new Date(), // set this up so it automatically saves date user added a job app
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+
+  //state for tracking edit mode
+  const [currentEditid, setCurrentEditId] = useState(null);
 
   // this will fire for the onClick event of the submit bttn after form submission
   const AddNewJobApp = (newJob) => {
@@ -45,6 +31,33 @@ const Table = () => {
       dateAdded: new Date().getTime(),
     };
     setJobApps((prev) => [...prev, newJobApp]);
+  };
+
+  const UpdateJobApp = (updatedJob) => {
+    setJobApps((prev) =>
+      prev.map((job) => (job.id === updatedJob.id ? updatedJob : job))
+    );
+  };
+
+  const handleEdit = (jobAppToEditId) => {
+    const jobAppToEdit = jobApps.find((jobApp) => jobApp.id === jobAppToEditId);
+
+    if (!jobAppToEditId) {
+      return;
+    }
+    // populate data from existing job App
+    setNewJobApp({
+      companyTitle: jobAppToEdit.companyTitle,
+      role: jobAppToEdit.role,
+      description: jobAppToEdit.description,
+      status: jobAppToEdit.status,
+      dateAdded: jobAppToEdit.dataAdded,
+    });
+    // activate "edit" mode + store ID of job App
+    setIsEditing(true);
+    setCurrentEditId(jobAppToEdit);
+
+    setIsModalOpen(true);
   };
 
   // this useEffect will refresh/update the jobApps array
@@ -87,13 +100,20 @@ const Table = () => {
             </thead>
             <tbody>
               {/* will need to map through an array of job apps, and pass through the props to jobCard component */}
-              <JobCard jobApps={jobApps} />
+              <JobCard jobApps={jobApps} handleEdit={handleEdit} />
             </tbody>
           </table>
           <JobAppForm
+            jobApps={jobApps}
             isModalOpen={isModalOpen}
+            newJobApp={newJobApp}
+            setNewJobApp={setNewJobApp}
             setIsModalOpen={setIsModalOpen}
             AddNewJobApp={AddNewJobApp}
+            isEditing={isEditing}
+            currentEditid={currentEditid}
+            setCurrentEditId={setCurrentEditId}
+            UpdateJobApp={UpdateJobApp}
           />
         </div>
       </div>
