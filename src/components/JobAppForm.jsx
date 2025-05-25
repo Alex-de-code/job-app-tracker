@@ -83,9 +83,17 @@ const JobAppForm = ({
     <>
       <div className={`${modalVisibility(isModalOpen)}`}>
         <div className="mt-3">
-          <h3 className="font-semibold border-b-3 border-slate-800 mb-4">
-            Add New Job Application
-          </h3>
+          {/* Dynamic title for form */}
+          {!isEditing ? (
+            <h3 className="font-semibold border-b-3 border-slate-800 mb-4">
+              Add New Job Application
+            </h3>
+          ) : (
+            <h3 className="font-semibold border-b-3 border-slate-800 mb-4">
+              Edit Job Application
+            </h3>
+          )}
+
           {/* <hr className="mb-3 rounded hei" /> */}
         </div>
         <form onSubmit={handleSubmit}>

@@ -2,7 +2,7 @@ import React from "react";
 import { MdOutlineEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 
-const JobCard = ({ jobApps, handleEdit }) => {
+const JobCard = ({ jobApps, handleEdit, handleDelete }) => {
   const getStatusTagColor = (status) => {
     switch (status) {
       case "Applied":
@@ -81,6 +81,7 @@ const JobCard = ({ jobApps, handleEdit }) => {
                 <button
                   onClick={() => {
                     console.log("Clicked Delete Job Application");
+                    handleDelete(jobApp);
                   }}
                 >
                   <MdDelete className="size-5.5" />

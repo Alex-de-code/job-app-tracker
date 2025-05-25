@@ -73,6 +73,10 @@ const Table = ({ jobApps, setJobApps }) => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (selectedJob) => {
+    setJobApps(jobApps.filter((job) => job.id !== selectedJob.id));
+  };
+
   // this useEffect will refresh/update the jobApps array
   useEffect(() => {}, [jobApps]);
 
@@ -113,7 +117,11 @@ const Table = ({ jobApps, setJobApps }) => {
             </thead>
             <tbody>
               {/* will need to map through an array of job apps, and pass through the props to jobCard component */}
-              <JobCard jobApps={jobApps} handleEdit={handleEdit} />
+              <JobCard
+                jobApps={jobApps}
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}
+              />
             </tbody>
           </table>
           <JobAppForm
