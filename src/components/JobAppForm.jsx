@@ -150,12 +150,12 @@ const JobAppForm = ({
             {/* Add a live date feature so users can see the date they applied to a job, this could be used for metrics later  */}
           </div>
           <div className=" mt-3 flex flex-row gap-2">
-            <div className="inline-block bg-blue-200 px-2 py-1 rounded hover:opacity-75">
+            <div className="inline-block px-2 border-2 py-1 rounded hover:bg-slate-300">
               <button type="submit" className="cursor-pointer">
                 Submit
               </button>
             </div>
-            <div className="inline-block bg-red-200 px-2 py-1 rounded hover:opacity-75">
+            <div className="inline-block text-white border-2 border-black bg-black px-2 py-1 rounded hover:bg-slate-300 hover:text-black hover:border-slate-300 hover:border-2">
               <button onClick={handleCancel} className="cursor-pointer">
                 Cancel
               </button>
