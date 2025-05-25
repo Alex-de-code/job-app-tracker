@@ -155,7 +155,7 @@ const JobAppForm = ({
                 Submit
               </button>
             </div>
-            <div className="inline-block text-white border-2 border-black bg-black px-2 py-1 rounded hover:bg-slate-300 hover:text-black hover:border-slate-300 hover:border-2">
+            <div className="inline-block text-white border-2 border-black bg-black px-2 py-1 rounded hover:border-stone-200 hover:border-2  hover:rounded-lg">
               <button onClick={handleCancel} className="cursor-pointer">
                 Cancel
               </button>
