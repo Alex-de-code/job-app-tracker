@@ -18,7 +18,7 @@ const Table = ({ jobApps, setJobApps }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   //state for tracking edit mode
-  const [currentEditid, setCurrentEditId] = useState(null);
+  const [currentEditId, setCurrentEditId] = useState(null);
 
   // this will fire for the onClick event of the submit bttn after form submission
   const AddNewJobApp = (newJob) => {
@@ -39,10 +39,23 @@ const Table = ({ jobApps, setJobApps }) => {
     );
   };
 
-  const handleEdit = (jobAppToEditId) => {
-    const jobAppToEdit = jobApps.find((jobApp) => jobApp.id === jobAppToEditId);
+  const handleAddNew = () => {
+    setIsEditing(false);
+    setCurrentEditId(null);
+    setNewJobApp({
+      companyTitle: "",
+      role: "",
+      description: "",
+      status: "",
+      dateAdded: new Date().getTime(),
+    });
+    setIsModalOpen(true);
+  };
 
-    if (!jobAppToEditId) {
+  const handleEdit = (selectedJob) => {
+    const jobAppToEdit = jobApps.find((jobApp) => jobApp.id === selectedJob.id);
+
+    if (!jobAppToEdit.id) {
       return;
     }
     // populate data from existing job App
@@ -55,7 +68,7 @@ const Table = ({ jobApps, setJobApps }) => {
     });
     // activate "edit" mode + store ID of job App
     setIsEditing(true);
-    setCurrentEditId(jobAppToEdit);
+    setCurrentEditId(selectedJob.id);
 
     setIsModalOpen(true);
   };
@@ -74,7 +87,7 @@ const Table = ({ jobApps, setJobApps }) => {
       <div className="flex flex-row p-10">
         <div className="mr-1 mt-1 ">
           {/* this will open the form for users to input a new job application */}
-          <button onClick={() => setIsModalOpen(true)}>
+          <button onClick={() => handleAddNew()}>
             <MdAddBox className="size-9 hover:opacity-75" />
           </button>
         </div>
@@ -111,7 +124,7 @@ const Table = ({ jobApps, setJobApps }) => {
             setIsModalOpen={setIsModalOpen}
             AddNewJobApp={AddNewJobApp}
             isEditing={isEditing}
-            currentEditid={currentEditid}
+            currentEditId={currentEditId}
             setCurrentEditId={setCurrentEditId}
             UpdateJobApp={UpdateJobApp}
           />

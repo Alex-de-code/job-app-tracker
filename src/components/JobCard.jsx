@@ -47,51 +47,49 @@ const JobCard = ({ jobApps, handleEdit }) => {
       {/* Remember: Change hard coded data to variables based on schema design in Table.jsx + form component */}
       {/* Remember: to make the table scrollable, so the component doesn't stretch the page infinitely */}
 
-      {jobApps.map(
-        ({ id, companyTitle, role, description, status, dateAdded }) => (
-          <tr key={id} className="hover:bg-slate-200">
-            <td className="py-2 px-3 text-sm">{companyTitle}</td>
-            <td className="py-2 px-3 text-sm">{role}</td>
-            <td className="py-2 px-3 text-sm">{description}</td>
-            {/* be cool for user to click on application status and toggle it that way or click through a slider animation */}
-            <td className="py-2 px-3 text-sm">
+      {jobApps.map((jobApp) => (
+        <tr key={jobApp.id} className="hover:bg-slate-200">
+          <td className="py-2 px-3 text-sm">{jobApp.companyTitle}</td>
+          <td className="py-2 px-3 text-sm">{jobApp.role}</td>
+          <td className="py-2 px-3 text-sm">{jobApp.description}</td>
+          {/* be cool for user to click on application status and toggle it that way or click through a slider animation */}
+          <td className="py-2 px-3 text-sm">
+            {" "}
+            <div
+              className={`rounded-lg py-1 px-2 shadow hover:opacity-75 text-center ${
+                getStatusTagColor(jobApp.status).backgroundColor
+              }`}
+            >
+              {jobApp.status}
+            </div>
+          </td>
+          <td className="py-2 px-3 text-sm">{formatDate(jobApp.dateAdded)}</td>
+          <td className="py-2 px-3">
+            <div className="flex flex-row items-center justify-around">
               {" "}
-              <div
-                className={`rounded-lg py-1 px-2 shadow hover:opacity-75 text-center ${
-                  getStatusTagColor(status).backgroundColor
-                }`}
-              >
-                {status}
+              <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
+                <button
+                  onClick={() => {
+                    console.log("Clicked Edit Job Application");
+                    handleEdit(jobApp);
+                  }}
+                >
+                  <MdOutlineEdit className="size-5.5" />
+                </button>
               </div>
-            </td>
-            <td className="py-2 px-3 text-sm">{formatDate(dateAdded)}</td>
-            <td className="py-2 px-3">
-              <div className="flex flex-row items-center justify-around">
-                {" "}
-                <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
-                  <button
-                    onClick={() => {
-                      console.log("Clicked Edit Job Application");
-                      handleEdit(id);
-                    }}
-                  >
-                    <MdOutlineEdit className="size-5.5" />
-                  </button>
-                </div>
-                <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
-                  <button
-                    onClick={() => {
-                      console.log("Clicked Delete Job Application");
-                    }}
-                  >
-                    <MdDelete className="size-5.5" />
-                  </button>
-                </div>
+              <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
+                <button
+                  onClick={() => {
+                    console.log("Clicked Delete Job Application");
+                  }}
+                >
+                  <MdDelete className="size-5.5" />
+                </button>
               </div>
-            </td>
-          </tr>
-        )
-      )}
+            </div>
+          </td>
+        </tr>
+      ))}
     </>
   );
 };

@@ -1,15 +1,15 @@
 import { useState } from "react";
 
 const JobAppForm = ({
+  jobApps,
   isModalOpen,
   setIsModalOpen,
   newJobApp,
   setNewJobApp,
   AddNewJobApp,
-  idEditing,
-  updateJobApp,
-  jobApps,
-  currentEditid,
+  isEditing,
+  UpdateJobApp,
+  currentEditId,
   setCurrentEditId,
 }) => {
   // SHould set this up like a modal pop up
@@ -50,9 +50,18 @@ const JobAppForm = ({
     }
 
     if (isEditing) {
-      updateJobApp(currentEditid);
+      // Get the original job to preserve its date
+      const originalJob = jobApps.find((job) => job.id === currentEditId);
+      UpdateJobApp({
+        ...newJobApp,
+        id: currentEditId,
+        dateAdded: originalJob?.dateAdded || new Date().getTime(),
+      });
     } else {
-      AddNewJobApp(newJobApp);
+      AddNewJobApp({
+        ...newJobApp,
+        dateAdded: newJobApp.dateAdded || new Date().getTime(),
+      });
     }
 
     // reset form
@@ -61,9 +70,11 @@ const JobAppForm = ({
       role: "",
       description: "",
       status: "",
-      dateAdded: new Date(),
+      dateAdded: new Date().getTime(),
     });
 
+    setCurrentEditId(null);
+    setIsModalOpen(false);
     // Close modal
     setIsModalOpen(false);
   };
