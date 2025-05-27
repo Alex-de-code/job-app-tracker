@@ -6,4 +6,4 @@ A simple, no distraction tracker for staying organized during job search with so
 
 Currently building out features + functionality.
 
-Stay tuned!
+--> [Click here for brief walkthrough](https://www.loom.com/share/72789b9943c8478aab42cdf475078cb3)
