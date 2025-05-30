@@ -63,7 +63,7 @@ const JobCard = ({ jobApps, handleEdit, handleDelete }) => {
               {jobApp.status}
             </div>
           </td>
-          <td className="py-2 px-3 text-sm">{formatDate(jobApp.dateAdded)}</td>
+          <td className="py-2 px-3 text-sm">{formatDate(jobApp.created_at)}</td>
           <td className="py-2 px-3">
             <div className="flex flex-row items-center justify-around">
               {" "}

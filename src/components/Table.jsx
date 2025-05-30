@@ -12,7 +12,7 @@ const Table = ({ jobApps, setJobApps }) => {
     role: "",
     description: "",
     status: "",
-    dataAdded: new Date(), // set this up so it automatically saves date user added a job app
+    created_at: new Date(), // set this up so it automatically saves date user added a job app
   });
 
   const [isEditing, setIsEditing] = useState(false);

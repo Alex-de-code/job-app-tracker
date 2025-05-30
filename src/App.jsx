@@ -34,7 +34,7 @@ function App() {
 
   const fetchJobApplications = async () => {
     const { error, data } = await supabase
-      .from("job_applicaitons") // from this table in Supabase backend
+      .from("job_applications") // from this table in Supabase backend
       .select("*") // select all columns
       .order("created_at"); // order based on creation time
 
