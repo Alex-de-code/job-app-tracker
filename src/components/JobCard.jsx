@@ -44,7 +44,6 @@ const JobCard = ({ jobApps, handleEdit, handleDelete }) => {
   };
   return (
     <>
-      {/* Remember: Change hard coded data to variables based on schema design in Table.jsx + form component */}
       {/* Remember: to make the table scrollable, so the component doesn't stretch the page infinitely */}
 
       {jobApps.map((jobApp) => (
@@ -81,7 +80,7 @@ const JobCard = ({ jobApps, handleEdit, handleDelete }) => {
                 <button
                   onClick={() => {
                     console.log("Clicked Delete Job Application");
-                    handleDelete(jobApp);
+                    handleDelete(jobApp.id);
                   }}
                 >
                   <MdDelete className="size-5.5" />

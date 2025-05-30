@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { supabase } from "../supabase-client";
 
 const JobAppForm = ({
-  jobApps,
   isModalOpen,
   setIsModalOpen,
   newJobApp,
@@ -35,11 +35,11 @@ const JobAppForm = ({
   };
 
   //update logic for handle submit
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validate required fields
     if (
-      // check if there are any missing input fields / blnak fields in form
       !newJobApp.companyTitle.trim() ||
       !newJobApp.role.trim() ||
       !newJobApp.description.trim() ||
@@ -49,34 +49,31 @@ const JobAppForm = ({
       return;
     }
 
-    if (isEditing) {
-      // Get the original job to preserve its date
-      const originalJob = jobApps.find((job) => job.id === currentEditId);
-      UpdateJobApp({
-        ...newJobApp,
-        id: currentEditId,
-        dateAdded: originalJob?.dateAdded || new Date().getTime(),
+    try {
+      if (isEditing) {
+        // Update existing job
+        await UpdateJobApp({
+          ...newJobApp,
+          id: currentEditId,
+        });
+      } else {
+        // Add new job
+        await AddNewJobApp(newJobApp);
+      }
+
+      // Reset form and close modal
+      setNewJobApp({
+        companyTitle: "",
+        role: "",
+        description: "",
+        status: "",
+        created_at: "",
       });
-    } else {
-      AddNewJobApp({
-        ...newJobApp,
-        dateAdded: newJobApp.dateAdded || new Date().getTime(),
-      });
+      setCurrentEditId(null);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error saving job:", error.message);
     }
-
-    // reset form
-    setNewJobApp({
-      ompanyTitle: "",
-      role: "",
-      description: "",
-      status: "",
-      dateAdded: new Date().getTime(),
-    });
-
-    setCurrentEditId(null);
-    setIsModalOpen(false);
-    // Close modal
-    setIsModalOpen(false);
   };
 
   return (

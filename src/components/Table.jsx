@@ -2,6 +2,7 @@ import JobCard from "./JobCard.jsx";
 import { MdAddBox } from "react-icons/md";
 import { useEffect, useState } from "react";
 import JobAppForm from "./JobAppForm.jsx";
+import { supabase } from "../supabase-client.js";
 
 const Table = ({ jobApps, setJobApps }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +13,7 @@ const Table = ({ jobApps, setJobApps }) => {
     role: "",
     description: "",
     status: "",
-    created_at: new Date(), // set this up so it automatically saves date user added a job app
+    created_at: null,
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -20,22 +21,38 @@ const Table = ({ jobApps, setJobApps }) => {
   //state for tracking edit mode
   const [currentEditId, setCurrentEditId] = useState(null);
 
-  // this will fire for the onClick event of the submit bttn after form submission
-  const AddNewJobApp = (newJob) => {
-    const maxId =
-      jobApps.length > 0 ? Math.max(...jobApps.map((job) => job.id)) : 0; // this method works even if jobs get deleted
+  const AddNewJobApp = async (newJob) => {
+    const { data, error } = await supabase
+      .from("job_applications")
+      .insert([
+        // insert a new row w/ our data
+        {
+          ...newJob,
+          created_at: new Date().toISOString(), // Proper timestamp format
+        },
+      ])
+      .select() // here Supabase will return newly inserted data
+      .single(); //ensures we only get one record
 
-    const newJobApp = {
-      ...newJob,
-      id: maxId + 1,
-      dateAdded: new Date().getTime(),
-    };
-    setJobApps((prev) => [...prev, newJobApp]);
+    if (error) throw error;
+
+    // Update frontend state with data from Supabase
+    setJobApps((prev) => [...prev, data]);
   };
 
-  const UpdateJobApp = (updatedJob) => {
+  const UpdateJobApp = async (updatedJob) => {
+    const { data, error } = await supabase
+      .from("job_applications")
+      .update(updatedJob)
+      .eq("id", updatedJob.id)
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    // Update frontend state
     setJobApps((prev) =>
-      prev.map((job) => (job.id === updatedJob.id ? updatedJob : job))
+      prev.map((job) => (job.id === updatedJob.id ? data : job))
     );
   };
 
@@ -47,7 +64,7 @@ const Table = ({ jobApps, setJobApps }) => {
       role: "",
       description: "",
       status: "",
-      dateAdded: new Date().getTime(),
+      created_at: "",
     });
     setIsModalOpen(true);
   };
@@ -64,7 +81,7 @@ const Table = ({ jobApps, setJobApps }) => {
       role: jobAppToEdit.role,
       description: jobAppToEdit.description,
       status: jobAppToEdit.status,
-      dateAdded: jobAppToEdit.dataAdded,
+      created_at: jobAppToEdit.created_at,
     });
     // activate "edit" mode + store ID of job App
     setIsEditing(true);
@@ -73,8 +90,23 @@ const Table = ({ jobApps, setJobApps }) => {
     setIsModalOpen(true);
   };
 
-  const handleDelete = (selectedJob) => {
-    setJobApps(jobApps.filter((job) => job.id !== selectedJob.id));
+  const handleDelete = async (selectedJobID) => {
+    try {
+      // Delete from Supabase
+      const { error } = await supabase
+        .from("job_applications")
+        .delete()
+        .eq("id", selectedJobID);
+
+      if (error) throw error;
+
+      // Update React state IMMEDIATELY (remove the deleted job)
+      setJobApps((prevJobs) =>
+        prevJobs.filter((job) => job.id !== selectedJobID)
+      );
+    } catch (error) {
+      console.error("Delete failed:", error.message);
+    }
   };
 
   // this useEffect will refresh/update the jobApps array
@@ -125,7 +157,6 @@ const Table = ({ jobApps, setJobApps }) => {
             </tbody>
           </table>
           <JobAppForm
-            jobApps={jobApps}
             isModalOpen={isModalOpen}
             newJobApp={newJobApp}
             setNewJobApp={setNewJobApp}
