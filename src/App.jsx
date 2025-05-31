@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import Table from "./components/Table.jsx";
 import { supabase } from "./supabase-client.js";
+import Auth from "./auth.jsx";
 
 function App() {
   const [jobApps, setJobApps] = useState([]); // store all job applications
@@ -28,6 +29,7 @@ function App() {
   return (
     <>
       <div className="min-h-screen bg-gray-200">
+        <Auth />
         <Table jobApps={jobApps} setJobApps={setJobApps} />
       </div>
     </>
