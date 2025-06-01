@@ -5,6 +5,7 @@ import { supabase } from "./supabase-client.js";
 import Auth from "./auth.jsx";
 
 function App() {
+  const [session, setSession] = useState(null);
   const [jobApps, setJobApps] = useState([]); // store all job applications
 
   const fetchJobApplications = async () => {
@@ -19,6 +20,16 @@ function App() {
     }
     setJobApps(data);
   };
+
+  const fetchSession = async () => {
+    const currentSession = await supabase.auth.getSession();
+    console.log(currentSession);
+    setSession(currentSession.data);
+  };
+
+  useEffect(() => {
+    fetchSession(); // listener to check for any state changes in user authentication status
+  }, []);
 
   useEffect(() => {
     fetchJobApplications();

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "./supabase-client.js";
 import undraw_stepping from "./assets/undraw_stepping-up.svg";
 import { MdListAlt } from "react-icons/md";
+
+// In the future should handle debugging vs. production more elegantly, could have a "dev" environment check that'll automatically filter off/on logic and logs for checking auth
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(true);
@@ -15,9 +17,29 @@ const Auth = () => {
     setError("");
     setLoading(true);
 
-    const { error: authError } = isSignUp
+    // **** For PRODUCTION, comment out for debugging!!!
+    // --> --> --->
+
+    // const { error: authError } = isSignUp
+    //   ? await supabase.auth.signUp({ email, password })
+    //   : await supabase.auth.signInWithPassword({ email, password });
+
+    // ------------------------------------------------------------
+
+    //**** For DEBUGGING, comment this out for production!!!
+    // --> --> --->
+    const { data: authData, error: authError } = isSignUp
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password });
+
+    console.log("Auth data:", authData); // For Debugging, Comment out for production!!!
+    console.log("Auth error:", authError); // For Debugging, Comment out for production!!!
+    const {
+      data: { session },
+    } = await supabase.auth.getSession(); // For DEBUGGING, comment out for production
+    console.log("Post-auth session:", session); // For DEBUGGING, comment out for production
+
+    // ---------------------------------------------------------
 
     setLoading(false);
 
@@ -27,6 +49,44 @@ const Auth = () => {
     }
   };
 
+  // **** For PRODUCTION only, comment out for debugging
+  // ---> -----> ---->
+
+  // useEffect(() => {
+  //   // Production: Keep listener but remove logs
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     // PROD: Silent handling
+  //     if (event === "SIGNED_OUT") {
+  //       // Clear user data
+  //     }
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, []);
+
+  //------------------------------------------------
+
+  // **** For DEBUGGING auth only, comment out for production
+  // ---> ---> --->
+  useEffect(() => {
+    // check if a session exists
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("CURRENT SESSION:", session);
+    });
+
+    //setup listener for all future auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("AUTH EVENT:", event, session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  // ---------------------------------------------------------------
   return (
     <>
       <div className="min-h-screen flex justify-center items-center">
