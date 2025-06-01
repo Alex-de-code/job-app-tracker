@@ -1,7 +1,32 @@
+import { useState } from "react";
+import { supabase } from "./supabase-client.js";
 import undraw_stepping from "./assets/undraw_stepping-up.svg";
 import { MdListAlt } from "react-icons/md";
 
 const Auth = () => {
+  const [isSignUp, setIsSignUp] = useState(true);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // adding loading state to prevent duplicate submissions
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const { error: authError } = isSignUp
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password });
+
+    setLoading(false);
+
+    if (authError) {
+      setError(authError.message);
+      console.error(authError);
+    }
+  };
+
   return (
     <>
       <div className="min-h-screen flex justify-center items-center">
@@ -29,9 +54,15 @@ const Auth = () => {
                 </h2>
               </div>
               <h4 className="px-24 text-2xl mb-5 text-slate-100">
-                Create an account
+                {isSignUp ? "Create your account" : "Log in to continue"}
               </h4>
-              <form action="" className="space-y-4 px-24">
+
+              {error && (
+                <div className="px-24 mb-4 text-red-100 bg-red-500/50 p-2 rounded">
+                  {error}
+                </div>
+              )}
+              <form onSubmit={handleSubmit} className="space-y-4 px-24">
                 <div className="flex flex-col">
                   {/* <label htmlFor="email" className="mb-1">
                   Email
@@ -41,15 +72,57 @@ const Auth = () => {
                     type="email"
                     className="p-2 bg-slate-100 rounded-lg shadow-sm hover:bg-slate-200"
                     placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="flex flex-col">
+                  {/* <label htmlFor="email" className="mb-1">
+                  Email
+                </label> */}
+                  <input
+                    id="password"
+                    type="password"
+                    className="p-2 bg-slate-100 rounded-lg shadow-sm hover:bg-slate-200"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    minLength={8}
                   />
                 </div>
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 bg-green-400 text-black rounded-lg shadow-sm hover:bg-green-500"
+                  disabled={loading}
+                  className={`w-full px-4 py-2 ${
+                    isSignUp ? "bg-green-400" : "bg-blue-400"
+                  } text-black rounded-lg shadow-sm hover:${
+                    isSignUp ? "bg-green-500" : "bg-blue-500"
+                  } ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 >
-                  Sign up
+                  {loading ? "Processing..." : isSignUp ? "Sign up" : "Log in"}
                 </button>
               </form>
+              <div className="text-center mt-4 px-24">
+                <p className="text-slate-100">
+                  {isSignUp
+                    ? "Already have an account? "
+                    : "Don't have an account? "}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsSignUp(!isSignUp);
+                      setError("");
+                    }}
+                    className="text-white underline hover:text-blue-500 focus:outline-none"
+                    disabled={loading}
+                  >
+                    {isSignUp ? "Log in here" : "Sign up here"}
+                  </button>
+                </p>
+              </div>
             </div>
           </div>
           <div className="flex items-center">
