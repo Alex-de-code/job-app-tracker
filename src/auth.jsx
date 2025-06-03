@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabase-client.js";
 import undraw_stepping from "./assets/undraw_stepping-up.svg";
-import { MdListAlt } from "react-icons/md";
+import { MdListAlt, MdInfo } from "react-icons/md";
 
 // In the future should handle debugging vs. production more elegantly, could have a "dev" environment check that'll automatically filter off/on logic and logs for checking auth
 
@@ -11,6 +11,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // adding loading state to prevent duplicate submissions
+  const [needsVerification, setNeedsVerification] = useState(false); // state for verification banner aftr sign up
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,12 +35,24 @@ const Auth = () => {
 
     console.log("Auth data:", authData); // For Debugging, Comment out for production!!!
     console.log("Auth error:", authError); // For Debugging, Comment out for production!!!
+
     const {
       data: { session },
     } = await supabase.auth.getSession(); // For DEBUGGING, comment out for production
     console.log("Post-auth session:", session); // For DEBUGGING, comment out for production
 
     // ---------------------------------------------------------
+
+    // Create public user record after successful signup
+    if (isSignUp && authData?.user) {
+      setNeedsVerification(true); // update verification banner state
+      // setError(`Verification email sent to ${email}. Please check your inbox.`);
+      await supabase.from("users").insert({
+        id: authData.user.id,
+        email: authData.user.email,
+        created_at: new Date().toISOString(),
+      });
+    }
 
     setLoading(false);
 
@@ -86,11 +99,30 @@ const Auth = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  useEffect(() => {
+    const check = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setNeedsVerification(user && !user.email_confirmed_at);
+    };
+    check();
+  }, []);
+
   // ---------------------------------------------------------------
   return (
     <>
       <div className="min-h-screen flex justify-center items-center">
-        {" "}
+        {needsVerification && (
+          <div className="fixed top-0 left-0 right-0 bg-amber-100 p-3 text-center border-b-2 border-amber-200 flex items-center justify-center">
+            <MdInfo className="size-6 mr-1" />
+            <span className="font-medium mr-1">
+              Verification Required:{" "}
+            </span>{" "}
+            Please check your email for the confirmation link to complete
+            registration
+          </div>
+        )}
         <div className="flex flex-row justify-evenly">
           <div className="md:w-1/3 w-1/2">
             <div className=" rounded-2xl flex justify-center">

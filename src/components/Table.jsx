@@ -22,12 +22,18 @@ const Table = ({ jobApps, setJobApps }) => {
   const [currentEditId, setCurrentEditId] = useState(null);
 
   const AddNewJobApp = async (newJob) => {
+    // get current user
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const { data, error } = await supabase
       .from("job_applications")
       .insert([
         // insert a new row w/ our data
         {
           ...newJob,
+          user_id: user.id, // authenticated user ID
           created_at: new Date().toISOString(), // Proper timestamp format
         },
       ])
@@ -41,10 +47,16 @@ const Table = ({ jobApps, setJobApps }) => {
   };
 
   const UpdateJobApp = async (updatedJob) => {
+    // get current user for security
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
     const { data, error } = await supabase
       .from("job_applications")
       .update(updatedJob)
       .eq("id", updatedJob.id)
+      .eq("user_id", user.id) // ensure user cans only update their own records
       .select()
       .single();
 
@@ -92,11 +104,17 @@ const Table = ({ jobApps, setJobApps }) => {
 
   const handleDelete = async (selectedJobID) => {
     try {
+      // Get current user for security check
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       // Delete from Supabase
       const { error } = await supabase
         .from("job_applications")
         .delete()
-        .eq("id", selectedJobID);
+        .eq("id", selectedJobID)
+        .eq("user_id", user.id); // Ensure user can only delete their own records
 
       if (error) throw error;
 
@@ -163,6 +181,7 @@ const Table = ({ jobApps, setJobApps }) => {
             setIsModalOpen={setIsModalOpen}
             AddNewJobApp={AddNewJobApp}
             isEditing={isEditing}
+            setIsEditing={setIsEditing}
             currentEditId={currentEditId}
             setCurrentEditId={setCurrentEditId}
             UpdateJobApp={UpdateJobApp}

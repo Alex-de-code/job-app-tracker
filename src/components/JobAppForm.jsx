@@ -8,6 +8,7 @@ const JobAppForm = ({
   setNewJobApp,
   AddNewJobApp,
   isEditing,
+  setIsEditing,
   UpdateJobApp,
   currentEditId,
   setCurrentEditId,

@@ -9,39 +9,85 @@ function App() {
   const [jobApps, setJobApps] = useState([]); // store all job applications
 
   const fetchJobApplications = async () => {
+    if (!session?.user?.id) return; // Only fetch if user is logged in
+
     const { error, data } = await supabase
       .from("job_applications") // from this table in Supabase backend
       .select("*") // select all columns
+      .eq("user_id", session.user.id) // Only get current user's jobs
+
       .order("created_at"); // order based on creation time
 
     if (error) {
       console.error("Error reading task: ", error.message);
       return;
     }
-    setJobApps(data);
+    setJobApps(data || []);
   };
 
   const fetchSession = async () => {
     const currentSession = await supabase.auth.getSession();
     console.log(currentSession);
-    setSession(currentSession.data);
+    setSession(currentSession.data.session);
+  };
+
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setJobApps([]); // Clear jobs on logout
   };
 
   useEffect(() => {
     fetchSession(); // listener to check for any state changes in user authentication status
+
+    // const { data: authListener } = supabase.auth.onAuthStateChange(
+    //   (_event, session) => {
+    //     setSession(session);
+    //   }
+    // );
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setSession(session);
+
+      // Handle email verification
+      if (event === "USER_UPDATED" && session?.user?.email_confirmed_at) {
+        await supabase.from("profiles").upsert({
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.name || "",
+        });
+      }
+
+      // Refresh jobs when auth state changes
+      if (["SIGNED_IN", "USER_UPDATED"].includes(event)) {
+        fetchJobApplications();
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
-    fetchJobApplications();
-  }, []);
+    if (session) {
+      fetchJobApplications();
+    }
+  }, [session?.user?.id]);
 
   console.log(jobApps);
 
   return (
     <>
       <div className="min-h-screen bg-gray-200">
-        <Auth />
-        <Table jobApps={jobApps} setJobApps={setJobApps} />
+        {session ? (
+          <>
+            <button onClick={logout}>Log Out</button>
+            <Table jobApps={jobApps} setJobApps={setJobApps} />
+          </>
+        ) : (
+          <Auth />
+        )}
       </div>
     </>
   );
