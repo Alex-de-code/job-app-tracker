@@ -3,6 +3,7 @@ import { MdAddBox } from "react-icons/md";
 import { useEffect, useState } from "react";
 import JobAppForm from "./JobAppForm.jsx";
 import { supabase } from "../supabase-client.js";
+import Pagination from "./Pagination.jsx";
 
 const Table = ({ jobApps, setJobApps }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -180,6 +181,7 @@ const Table = ({ jobApps, setJobApps }) => {
               />
             </tbody>
           </table>
+          <Pagination />
           <JobAppForm
             isModalOpen={isModalOpen}
             newJobApp={newJobApp}
