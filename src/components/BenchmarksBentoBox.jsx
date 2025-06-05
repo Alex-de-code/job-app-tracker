@@ -12,6 +12,8 @@ const BenchmarksBentoBox = () => {
 
   // Should I add progress bar for users to see if they've reached goal? Or is counter enough? maybe counter changes color to green once reached? or I keep badge?
 
+  // Should I add a heat map like Github so users know how many weeks they reached weekly goal, or everyday they applied to jobs????
+
   return (
     <>
       <div className="h-full grid gri-cols-1 lg:grid-cols-2 grid-rows-8 lg:grid-rows-4 gap-3">
