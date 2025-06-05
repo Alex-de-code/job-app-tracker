@@ -132,6 +132,16 @@ const Table = ({ jobApps, setJobApps }) => {
 
   // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
 
+  // --> --> ---> --->
+
+  // TODO: Add pagination to job applications table, could be 10 entries, 15 or 25, but this is essential so that UI doesn't break b/c of too many entries!!!!
+
+  //TODO: Add filtering bttns to side of table under add job bttn, think oldest to newest, newest to oldest, alphabetical order, etc
+
+  // TODO: WIll need to add feature where job application cards in table are clickable and open a view above page or new view altogether of all information of job application entry, this could be extensive info where table shows only essentials at a glance, maybe recruiter info, interview date, a hyperlink of actual job listing,
+
+  // Stretch goal: Build a web scraper or so users can paste a link to the job they applied to and then just update status, but have the app cover all inputs from link
+
   return (
     <>
       <div className="flex">

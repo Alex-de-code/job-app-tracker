@@ -6,6 +6,12 @@ const BenchmarksBentoBox = () => {
 
   // TODO: Create conditional logic that when a user's target goal is reached they unlock this badge -- can set a default of 10 - 25 jobs
 
+  // TODO: rethink table columns, should be responsive and when screen is small only essentials, role, date, state, edit, delete
+
+  // Stretch goal: build a secret game, or a dopamine reward after entering 15 + jobs in one day or reaching weekly goal users can play a mini game in the benchmarksbentobox as a reward, the game won't be secret but maybe I can implement a leaderboard that's only accessible in brief time window after users play game, maybe they get 3 tries to play and then the game is gone until next weeks -- this could be fun incentive to consistently use app and a treat to the user --very exciting
+
+  // Should I add progress bar for users to see if they've reached goal? Or is counter enough? maybe counter changes color to green once reached? or I keep badge?
+
   return (
     <>
       <div className="h-full grid gri-cols-1 lg:grid-cols-2 grid-rows-8 lg:grid-rows-4 gap-3">

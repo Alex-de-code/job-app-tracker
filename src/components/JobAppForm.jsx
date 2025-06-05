@@ -20,6 +20,10 @@ const JobAppForm = ({
 
   // need to send form submission to update dummy data array
 
+  /// ----> ----> ----> ----->
+
+  // TODO: Should Update modal so that it's over the UI, think a Z-index, right now the way form is set up it will always be below all job app entries which is a no no!!!
+
   const modalVisibility = (isModalOpen) => {
     return isModalOpen ? "visible" : "invisible";
   };

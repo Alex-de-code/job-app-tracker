@@ -5,6 +5,8 @@ import { MdListAlt, MdInfo } from "react-icons/md";
 
 // In the future should handle debugging vs. production more elegantly, could have a "dev" environment check that'll automatically filter off/on logic and logs for checking auth
 
+// TODO: Clean up aesthetic of sign up sign in, doesn't feel quite right
+
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState("");
