@@ -34,6 +34,14 @@ const JobAppForm = ({
   };
 
   const handleCancel = () => {
+    // Reset form and close modal
+    setNewJobApp({
+      companyTitle: "",
+      role: "",
+      description: "",
+      status: "",
+      created_at: "",
+    });
     setIsModalOpen(false);
     setIsEditing(false);
     setCurrentEditId(null);
