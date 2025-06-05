@@ -3,6 +3,7 @@ import "./App.css";
 import Table from "./components/Table.jsx";
 import { supabase } from "./supabase-client.js";
 import Auth from "./auth.jsx";
+import BenchmarksBentoBox from "./components/BenchmarksBentoBox.jsx";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -83,7 +84,14 @@ function App() {
         {session ? (
           <>
             <button onClick={logout}>Log Out</button>
-            <Table jobApps={jobApps} setJobApps={setJobApps} />
+            <div className="flex w-full p-4 gap-4">
+              <div className="w-2/3">
+                <Table jobApps={jobApps} setJobApps={setJobApps} />
+              </div>
+              <div className="w-1/3">
+                <BenchmarksBentoBox />
+              </div>
+            </div>
           </>
         ) : (
           <Auth />

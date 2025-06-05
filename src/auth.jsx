@@ -133,12 +133,7 @@ const Auth = () => {
             </div>
             <div className="  p-4 h-148 bg-slate-400 rounded-xl shadow-sm">
               <div className=" pt-8 pb-10">
-                {/* <h1 className="text-4xl text-white">Welcome Job Hunter!</h1> */}
                 <h2 className="text-xl text-slate-100 inline-block p-4 my-2 mx-12 border-2 border-slate-200 bg-slate-500 rounded-xl ">
-                  {/* Welcome to JTrack, a no fuss job application management
-                  system, designed by job seekers for job seekers. */}
-                  {/* Join the no-fuss job application system designed by job
-                  seekers, for job seekers. */}
                   Welcome to JTrack, the{" "}
                   <span className="font-medium text-white">no-fuss</span> job
                   application organizer designed by job seekers, for job
@@ -156,9 +151,6 @@ const Auth = () => {
               )}
               <form onSubmit={handleSubmit} className="space-y-4 px-24">
                 <div className="flex flex-col">
-                  {/* <label htmlFor="email" className="mb-1">
-                  Email
-                </label> */}
                   <input
                     id="email"
                     type="email"
@@ -170,9 +162,6 @@ const Auth = () => {
                   />
                 </div>
                 <div className="flex flex-col">
-                  {/* <label htmlFor="email" className="mb-1">
-                  Email
-                </label> */}
                   <input
                     id="password"
                     type="password"

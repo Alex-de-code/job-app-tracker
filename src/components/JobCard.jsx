@@ -64,9 +64,9 @@ const JobCard = ({ jobApps, handleEdit, handleDelete }) => {
           </td>
           <td className="py-2 px-3 text-sm">{formatDate(jobApp.created_at)}</td>
           <td className="py-2 px-3">
-            <div className="flex flex-row items-center justify-around">
+            <div className="flex flex-row items-center">
               {" "}
-              <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse">
+              <div className="opacity-70 hover:opacity-100 hover:outline-2 hover:animate-pulse mr-2">
                 <button
                   onClick={() => {
                     console.log("Clicked Edit Job Application");

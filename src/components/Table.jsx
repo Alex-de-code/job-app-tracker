@@ -130,23 +130,19 @@ const Table = ({ jobApps, setJobApps }) => {
   // this useEffect will refresh/update the jobApps array
   useEffect(() => {}, [jobApps]);
 
-  // useEffect(() => {}, [isModalOpen]);
-
-  // TODO: Create Form component that's seperate from table.jsx and jobCard.jsx, the submit bttn will trigger the addjobapp even handler, which we'll then put into useEffect
-
   // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
 
   return (
     <>
-      <div className="flex flex-row p-10">
-        <div className="mr-1 mt-1 ">
+      <div className="flex">
+        <div className="mr-1 mt-1">
           {/* this will open the form for users to input a new job application */}
           <button onClick={() => handleAddNew()}>
             <MdAddBox className="size-9 hover:opacity-75" />
           </button>
         </div>
         <div className="">
-          <table className=" bg-slate-100 rounded-lg shadow-sm">
+          <table className=" bg-slate-50 rounded-lg shadow-sm w-full table-fixed">
             <thead className="border-b-2 border-slate-200">
               <tr className="">
                 <th className="text-sm p-3 tracking-wide text-left">

@@ -96,7 +96,7 @@ const JobAppForm = ({
         </div>
         <form onSubmit={handleSubmit}>
           {/* <label htmlFor="companyTitle">Company Title:</label> */}
-          <div className={`shadow-sm bg-slate-100 rounded-lg`}>
+          <div className={`shadow-sm bg-slate-50 rounded-lg`}>
             <input
               type="text"
               id="companyTitle"
@@ -131,7 +131,7 @@ const JobAppForm = ({
               id="status"
               value={newJobApp.status || ""}
               onChange={handleChange}
-              className="hover:border-2 border-slate-200 rounded p-1 text-sm opacity-50"
+              className="hover:bg-slate-300 rounded p-3 text-sm opacity-50"
               required
             >
               <option disabled value="">
