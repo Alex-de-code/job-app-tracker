@@ -45,12 +45,11 @@ const JobCard = ({ jobApps, onEdit, onDelete }) => {
   return (
     <>
       {/* Remember: to make the table scrollable, so the component doesn't stretch the page infinitely */}
-
       {jobApps.map((jobApp) => (
         <tr key={jobApp.id} className="hover:bg-slate-200">
           <td className="py-2 px-3 text-sm">{jobApp.companyTitle}</td>
-          <td className="py-2 px-3 text-sm">{jobApp.role}</td>
-          <td className="py-2 px-3 text-sm">{jobApp.description}</td>
+          <td className="py-2 px-3 text-sm truncate">{jobApp.role}</td>
+          <td className="py-2 px-3 text-sm truncate">{jobApp.description}</td>
           {/* be cool for user to click on application status and toggle it that way or click through a slider animation */}
           <td className="py-2 px-3 text-sm">
             {" "}

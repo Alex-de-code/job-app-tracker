@@ -183,17 +183,63 @@ const Table = ({
             </thead>
             <tbody>
               {isLoading ? (
-                <tr>
-                  <td colSpan="5" className="px-6 py-4 text-center">
-                    Loading...
-                  </td>
-                </tr>
+                // Skeleton Loader to fill table while we call data
+                Array.from({ length: itemsPerPage }).map((_, index) => (
+                  <tr key={`skeleton-${index}`} className="hover:bg-slate-200">
+                    <td className="py-2 px-3 text-sm">
+                      <div className="h-4 bg-slate-200 rounded animate-pulse w-3/4"></div>
+                    </td>
+                    <td className="py-2 px-3 text-sm">
+                      <div className="h-4 bg-slate-200 rounded animate-pulse w-2/3"></div>
+                    </td>
+                    <td className="py-2 px-3 text-sm">
+                      <div className="h-4 bg-slate-200 rounded animate-pulse"></div>
+                    </td>
+                    <td className="py-2 px-3 text-sm">
+                      <div className="rounded-md py-2 px-2 shadow bg-slate-200 animate-pulse w-20"></div>
+                    </td>
+                    <td className="py-2 px-3 text-sm">
+                      <div className="h-4 bg-slate-200 rounded animate-pulse w-24"></div>
+                    </td>
+                    <td className="py-2 px-3 flex">
+                      <div className="h-5 bg-slate-200 rounded animate-pulse w-6 mr-2"></div>{" "}
+                      <div className="h-5 bg-slate-200 rounded animate-pulse w-6"></div>{" "}
+                    </td>
+                  </tr>
+                ))
               ) : (
-                <JobCard
-                  jobApps={jobApps}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                />
+                <>
+                  <JobCard
+                    jobApps={jobApps}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                  {/* Row fills so length of table stays the same */}
+                  {jobApps.length < itemsPerPage && // here we check if we have fewer jobs than items per page
+                    Array.from({ length: itemsPerPage - jobApps.length }).map(
+                      // Array.from() ===> converts to an array we can map over
+                      // { length: X } ====> creates an array-like object with X empty slots
+                      //
+                      (
+                        _,
+                        index // we use an underscore to ignore 1st param
+                      ) => (
+                        <tr key={`filler-${index}`} className="">
+                          {/* `filler-${index}` ===> apparently a more robust way of handling children, good to consider especially for lists that may experience reordering and that aren't static */}
+                          <td className="py-2 px-3 text-sm">&nbsp;</td>
+                          <td className="py-2 px-3 text-sm">&nbsp;</td>
+                          <td className="py-2 px-3 text-sm">&nbsp;</td>
+                          <td className="py-2 px-3 text-sm">
+                            <div className="rounded-lg py-1 px-2 invisible">
+                              —
+                            </div>
+                          </td>
+                          <td className="py-2 px-3 text-sm">&nbsp;</td>
+                          <td className="py-2 px-3">&nbsp;</td>
+                        </tr>
+                      )
+                    )}
+                </>
               )}
             </tbody>
           </table>
