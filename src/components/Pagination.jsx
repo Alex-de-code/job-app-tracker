@@ -6,6 +6,12 @@ const Pagination = ({
   totalItems,
   onPageChange,
 }) => {
+  // TODO: On page refresh pages, get messed up and show trunctation and last page only sometimes, need to fix this
+  // TODO: Handle Items per change isn't working so number of job apps on table doesn't update, need to fix this
+  // TODO: Also need to set pagination so it doesn't move as table height changes, this may be a fix for the table itself or in jobcard? Maybe we conditionally render the rest of table height so it reaches a point so pagination component is always aligned with the bottom view??
+  // TODO: Change  boiler plate styling of pagination to be better suited for UI
+  // TODO: Count of entries doesn't update on front end, but on page refresh when another call is made to supabase it does, need to set a solution up on frontend so entries/job application count updates!
+
   // calculate total pages needed for table, based on item count & items per page
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
