@@ -5,7 +5,16 @@ import JobAppForm from "./JobAppForm.jsx";
 import { supabase } from "../supabase-client.js";
 import Pagination from "./Pagination.jsx";
 
-const Table = ({ jobApps, setJobApps }) => {
+const Table = ({
+  jobApps,
+  setJobApps,
+  currentPage,
+  itemsPerPage,
+  totalItems,
+  onPageChange,
+  onItemsPerPageChange,
+  isLoading,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   //state for form inputs
@@ -173,15 +182,28 @@ const Table = ({ jobApps, setJobApps }) => {
               </tr>
             </thead>
             <tbody>
-              {/* will need to map through an array of job apps, and pass through the props to jobCard component */}
-              <JobCard
-                jobApps={jobApps}
-                handleEdit={handleEdit}
-                handleDelete={handleDelete}
-              />
+              {isLoading ? (
+                <tr>
+                  <td colSpan="5" className="px-6 py-4 text-center">
+                    Loading...
+                  </td>
+                </tr>
+              ) : (
+                <JobCard
+                  jobApps={jobApps}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              )}
             </tbody>
           </table>
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItems={totalItems}
+            onPageChange={onPageChange}
+            onItemsPerPageChange={onItemsPerPageChange}
+          />
           <JobAppForm
             isModalOpen={isModalOpen}
             newJobApp={newJobApp}
