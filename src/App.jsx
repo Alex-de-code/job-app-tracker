@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import Nav from "./components/Nav.jsx";
 import Table from "./components/Table.jsx";
 import { supabase } from "./supabase-client.js";
 import Auth from "./auth.jsx";
@@ -94,7 +95,7 @@ function App() {
       <div className="min-h-screen bg-gray-200">
         {session ? (
           <>
-            <button onClick={logout}>Log Out</button>
+            <Nav logout={logout} />
             <div className="flex w-full p-4 gap-4">
               <div className="w-2/3">
                 <Table
