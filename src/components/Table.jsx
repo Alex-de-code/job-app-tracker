@@ -134,20 +134,30 @@ const Table = ({
 
       if (error) throw error;
 
-      // Update React state IMMEDIATELY (remove the deleted job)
-      setJobApps((prevJobs) =>
-        prevJobs.filter((job) => job.id !== selectedJobID)
-      );
+      // Get current state before deletion for pagination logic
+      const currentJobCount = jobApps.length;
+      const isLastItemOnPage =
+        currentJobCount % itemsPerPage === 1 ||
+        currentJobCount ===
+          // Update React state IMMEDIATELY (remove the deleted job)
+          setJobApps((prevJobs) =>
+            prevJobs.filter((job) => job.id !== selectedJobID)
+          );
 
       // Update frontend state of total job app entries from user for faster UI
       setTotalItems((prev) => prev - 1); // Decrement count
+
+      // Handle pagination after deletion
+      if (isLastItemOnPage && isLastPage && currentPage > 1) {
+        onPageChange(currentPage - 1); // Move to previous page if we deleted the last item on the current page
+      }
     } catch (error) {
       console.error("Delete failed:", error.message);
     }
   };
 
   // this useEffect will refresh/update the jobApps array
-  useEffect(() => {}, [jobApps, totalItems, currentPage, itemsPerPage]);
+  useEffect(() => {}, [jobApps, itemsPerPage, onPageChange]);
 
   // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
 
@@ -265,6 +275,7 @@ const Table = ({
             setNewJobApp={setNewJobApp}
             setIsModalOpen={setIsModalOpen}
             AddNewJobApp={AddNewJobApp}
+            currentPage={currentPage}
             onPageChange={onPageChange} // Pass down pagination control
             jobApps={jobApps}
             itemsPerPage={itemsPerPage}

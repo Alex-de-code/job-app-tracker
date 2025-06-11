@@ -46,7 +46,16 @@ const JobCard = ({ jobApps, onEdit, onDelete }) => {
     <>
       {/* Remember: to make the table scrollable, so the component doesn't stretch the page infinitely */}
       {jobApps.map((jobApp) => (
-        <tr key={jobApp.id} className="hover:bg-slate-200">
+        <tr
+          key={jobApp.id}
+          onClick={() =>
+            // this will be where we set the handler to adjust the table view and open up the full view of a job app entry, could make it a pop up modal or set up conditional logic to replace table view with a view of the job, maybe it becomes it's own view???
+            console.log(
+              `Show me full detailed view for job application ${jobApp.id}`
+            )
+          }
+          className="hover:bg-slate-200"
+        >
           <td className="py-2 px-3 text-sm">{jobApp.companyTitle}</td>
           <td className="py-2 px-3 text-sm truncate">{jobApp.role}</td>
           <td className="py-2 px-3 text-sm truncate">{jobApp.description}</td>

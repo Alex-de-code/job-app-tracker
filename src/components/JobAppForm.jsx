@@ -15,6 +15,7 @@ const JobAppForm = ({
   onPageChange,
   jobApps,
   itemsPerPage,
+  currentPage,
 }) => {
   // SHould set this up like a modal pop up
   // think Z index overlayed atop the intial table

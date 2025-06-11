@@ -7,6 +7,8 @@ const Pagination = ({
   totalItems,
   onPageChange,
 }) => {
+  // TODO: When a user deletes the first entry of a table the table is empty, it doesn't refresh and also the next button that's disabled somehow unlocks allowing the user to continue to navigate to empty pages until page refresh
+
   // TODO: On page refresh pages, get messed up and show trunctation and last page only sometimes, need to fix this
   // TODO: Handle Items per change isn't working so number of job apps on table doesn't update, need to fix this
   // TODO: Also need to set pagination so it doesn't move as table height changes, this may be a fix for the table itself or in jobcard? Maybe we conditionally render the rest of table height so it reaches a point so pagination component is always aligned with the bottom view??
