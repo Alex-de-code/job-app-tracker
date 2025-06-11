@@ -12,6 +12,9 @@ const JobAppForm = ({
   UpdateJobApp,
   currentEditId,
   setCurrentEditId,
+  onPageChange,
+  jobApps,
+  itemsPerPage,
 }) => {
   // SHould set this up like a modal pop up
   // think Z index overlayed atop the intial table
@@ -72,6 +75,11 @@ const JobAppForm = ({
       } else {
         // Add new job
         await AddNewJobApp(newJobApp);
+
+        // Check if current page is now over capacity, this is to update table view if count of entries reaches of view limit to create new table page
+        if (jobApps && jobApps.length % itemsPerPage === 0) {
+          onPageChange(currentPage + 1); // Move to next page
+        }
       }
 
       // Reset form and close modal

@@ -96,7 +96,7 @@ function App() {
         {session ? (
           <>
             <Nav logout={logout} />
-            <div className="flex w-full p-4 gap-4">
+            <div className="flex w-full p-4 gap-4 pt-18">
               <div className="w-2/3">
                 <Table
                   jobApps={jobApps}
@@ -104,6 +104,7 @@ function App() {
                   currentPage={currentPage}
                   itemsPerPage={itemsPerPage}
                   totalItems={totalItems}
+                  setTotalItems={setTotalItems}
                   onPageChange={setCurrentPage}
                   onItemsPerPageChange={setItemsPerPage}
                   isLoading={isLoading}

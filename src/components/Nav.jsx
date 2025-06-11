@@ -4,13 +4,13 @@ import { MdListAlt } from "react-icons/md";
 const Nav = ({ logout }) => {
   return (
     <>
-      <div className="px-4 pt-2">
-        <div className="bg-gray-50 border-2 border-black p-3 rounded-lg w-full">
+      <div className="fixed top-0 left-0 right-0">
+        <div className="bg-black/75 p-3 w-full shadow">
           <div className="flex flex-row items-center">
             <div className=" rounded-xl flex justify-center">
-              <span className="flex flex-row items-center ">
-                <MdListAlt className="size-7 text-slate-400" />
-                <h3 className="text-lg ml-1 ">JTrack</h3>
+              <span className="flex flex-row items-center text-white">
+                <MdListAlt className="size-7 text-white text-shadow-2xs" />
+                <h3 className="text-lg ml-1  text-shadow-2xs">JTrack</h3>
               </span>
             </div>
 

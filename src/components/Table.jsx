@@ -10,6 +10,7 @@ const Table = ({
   setJobApps,
   currentPage,
   itemsPerPage,
+  setTotalItems,
   totalItems,
   onPageChange,
   onItemsPerPageChange,
@@ -52,8 +53,13 @@ const Table = ({
 
     if (error) throw error;
 
+    // Update frontend state of total job app entries from user for faster UI
+    setTotalItems((prev) => prev + 1); // Increment count
+
     // Update frontend state with data from Supabase
     setJobApps((prev) => [...prev, data]);
+
+    return data; // could potentially use this for a toast message
   };
 
   const UpdateJobApp = async (updatedJob) => {
@@ -132,13 +138,16 @@ const Table = ({
       setJobApps((prevJobs) =>
         prevJobs.filter((job) => job.id !== selectedJobID)
       );
+
+      // Update frontend state of total job app entries from user for faster UI
+      setTotalItems((prev) => prev - 1); // Decrement count
     } catch (error) {
       console.error("Delete failed:", error.message);
     }
   };
 
   // this useEffect will refresh/update the jobApps array
-  useEffect(() => {}, [jobApps]);
+  useEffect(() => {}, [jobApps, totalItems, currentPage, itemsPerPage]);
 
   // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
 
@@ -256,6 +265,9 @@ const Table = ({
             setNewJobApp={setNewJobApp}
             setIsModalOpen={setIsModalOpen}
             AddNewJobApp={AddNewJobApp}
+            onPageChange={onPageChange} // Pass down pagination control
+            jobApps={jobApps}
+            itemsPerPage={itemsPerPage}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
             currentEditId={currentEditId}
