@@ -100,87 +100,92 @@ const JobAppForm = ({
 
   return (
     <>
-      <div className={`${modalVisibility(isModalOpen)}`}>
-        <div className="mt-3">
-          {/* Dynamic title for form */}
-          {!isEditing ? (
-            <h3 className="font-semibold border-b-3 border-slate-800 mb-4">
-              Add New Job Application
-            </h3>
-          ) : (
-            <h3 className="font-semibold border-b-3 border-slate-800 mb-4">
-              Edit Job Application
-            </h3>
-          )}
+      <div className={`${modalVisibility(isModalOpen)} `}>
+        <div className="fixed inset-0 bg-blur-sm bg-opacity-50 backdrop-blur-sm z-40"></div>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-gray-200 bg-opacity-50 p-4 rounded-lg shadow-xl w-full max-w-4xl mx-4">
+            <div className="">
+              {/* Dynamic title for form */}
+              {!isEditing ? (
+                <h3 className="text-xl font-semibold border-b-3 border-slate-800 mb-4">
+                  Add New Job Application
+                </h3>
+              ) : (
+                <h3 className="text-xl font-semibold border-b-3 border-slate-800 mb-4">
+                  Edit Job Application
+                </h3>
+              )}
 
-          {/* <hr className="mb-3 rounded hei" /> */}
+              {/* <hr className="mb-3 rounded hei" /> */}
+            </div>
+            <form onSubmit={handleSubmit}>
+              {/* <label htmlFor="companyTitle">Company Title:</label> */}
+              <div className={`shadow-sm bg-slate-50 rounded-lg`}>
+                <input
+                  type="text"
+                  id="companyTitle"
+                  value={newJobApp.companyTitle || ""} // added fallback value to emptry string w/o this error pops up when program hits trim() in handleSubmit()
+                  onChange={handleChange}
+                  className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-2"
+                  placeholder="Company Title"
+                  required
+                />
+                {/* <label htmlFor="role">Role:</label> */}
+                <input
+                  type="text"
+                  id="role"
+                  value={newJobApp.role || ""}
+                  onChange={handleChange}
+                  className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-5"
+                  placeholder="Role"
+                  required
+                />
+                {/* <label htmlFor="description">Description:</label> */}
+                <input
+                  type="text"
+                  id="description"
+                  value={newJobApp.description || ""}
+                  onChange={handleChange}
+                  className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-9"
+                  placeholder="Description"
+                  required
+                />
+
+                <select
+                  id="status"
+                  value={newJobApp.status || ""}
+                  onChange={handleChange}
+                  className="hover:bg-slate-300 rounded p-3 text-sm opacity-50"
+                  required
+                >
+                  <option disabled value="">
+                    Select Status
+                  </option>
+                  <option value="Applied">Applied</option>
+                  <option value="Interviewing">Interviewing</option>
+                  <option value="Accepted">Accepted</option>
+                  <option value="Denied">Denied</option>
+                </select>
+
+                {/* <input type="date" id="date p/> */}
+
+                {/* Add a live date feature so users can see the date they applied to a job, this could be used for metrics later  */}
+              </div>
+              <div className=" mt-3 flex flex-row gap-2">
+                <div className="inline-block px-2 border-2 py-1 rounded hover:bg-slate-300">
+                  <button type="submit" className="cursor-pointer">
+                    Submit
+                  </button>
+                </div>
+                <div className="inline-block text-white border-2 border-black bg-black px-2 py-1 rounded hover:border-stone-200 hover:border-2  hover:rounded-lg">
+                  <button onClick={handleCancel} className="cursor-pointer">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
-        <form onSubmit={handleSubmit}>
-          {/* <label htmlFor="companyTitle">Company Title:</label> */}
-          <div className={`shadow-sm bg-slate-50 rounded-lg`}>
-            <input
-              type="text"
-              id="companyTitle"
-              value={newJobApp.companyTitle || ""} // added fallback value to emptry string w/o this error pops up when program hits trim() in handleSubmit()
-              onChange={handleChange}
-              className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-2"
-              placeholder="Company Title"
-              required
-            />
-            {/* <label htmlFor="role">Role:</label> */}
-            <input
-              type="text"
-              id="role"
-              value={newJobApp.role || ""}
-              onChange={handleChange}
-              className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-5"
-              placeholder="Role"
-              required
-            />
-            {/* <label htmlFor="description">Description:</label> */}
-            <input
-              type="text"
-              id="description"
-              value={newJobApp.description || ""}
-              onChange={handleChange}
-              className="hover:bg-slate-200 rounded text-sm p-3 w-1/6 mr-9"
-              placeholder="Description"
-              required
-            />
-
-            <select
-              id="status"
-              value={newJobApp.status || ""}
-              onChange={handleChange}
-              className="hover:bg-slate-300 rounded p-3 text-sm opacity-50"
-              required
-            >
-              <option disabled value="">
-                Select Status
-              </option>
-              <option value="Applied">Applied</option>
-              <option value="Interviewing">Interviewing</option>
-              <option value="Accepted">Accepted</option>
-              <option value="Denied">Denied</option>
-            </select>
-
-            {/* <input type="date" id="date p/> */}
-
-            {/* Add a live date feature so users can see the date they applied to a job, this could be used for metrics later  */}
-          </div>
-          <div className=" mt-3 flex flex-row gap-2">
-            <div className="inline-block px-2 border-2 py-1 rounded hover:bg-slate-300">
-              <button type="submit" className="cursor-pointer">
-                Submit
-              </button>
-            </div>
-            <div className="inline-block text-white border-2 border-black bg-black px-2 py-1 rounded hover:border-stone-200 hover:border-2  hover:rounded-lg">
-              <button onClick={handleCancel} className="cursor-pointer">
-                Cancel
-              </button>
-            </div>
-          </div>
-        </form>
       </div>
     </>
   );
