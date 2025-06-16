@@ -1,6 +1,6 @@
 # Job Application Tracker
 
-![Screenshot](src/assets/stage3ScreenShot.png)
+![Screenshot](src/assets/stage4ScreenShot.png)
 
 A simple, no distraction tracker for staying organized during job search with some great quality of life features.
 
