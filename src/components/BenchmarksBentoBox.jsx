@@ -85,7 +85,7 @@ const BenchmarksBentoBox = () => {
             <div className="text-4xl font-bold text-emerald-600">32%</div> */}
           {/* </div> */}
           {/* </div> */}
-          <ResponsiveContainer width="100%" height={227}>
+          <ResponsiveContainer width="100%" height="90%">
             <PieChart
               width={300}
               height={230}

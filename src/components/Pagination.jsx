@@ -144,7 +144,7 @@ const Pagination = ({
               className="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm focus:ring-blue-500 focus:border-blue-500"
               aria-label="Items per page"
             >
-              {[5, 10, 15, 20].map((size) => (
+              {[10, 15, 20].map((size) => (
                 <option key={size} value={size}>
                   Show {size}
                 </option>
