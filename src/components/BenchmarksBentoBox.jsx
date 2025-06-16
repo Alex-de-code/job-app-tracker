@@ -19,9 +19,9 @@ const BenchmarksBentoBox = () => {
 
   //DUmmy data for pie chart
   const data = [
-    { name: "Accepted", value: 300, fill: "#43a047" },
-    { name: "Interviewing", value: 200, fill: "#fdd835" },
-    { name: "Denied", value: 500, fill: "#e53935" },
+    { name: "Accepted", value: 300, fill: "#05df72" },
+    { name: "Interviewing", value: 200, fill: "#ffdf20" },
+    { name: "Denied", value: 500, fill: "#ff6467" },
     { name: "Applied", value: 100, fill: "#90a4ae" },
   ];
 
