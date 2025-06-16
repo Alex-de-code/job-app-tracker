@@ -9,7 +9,7 @@ const Search = () => {
             <FaMagnifyingGlass className="mr-2" size={24} />
             <input
               type="text"
-              className=" d bg-slate-50 rounded-lg p-2  shadow-sm w-full"
+              className="bg-slate-50 rounded-lg p-2  shadow-sm w-full"
             />
           </div>
           <div className="ml-auto">

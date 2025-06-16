@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MdOutlineFirstPage, MdLastPage } from "react-icons/md";
 
 const Pagination = ({
@@ -6,6 +6,7 @@ const Pagination = ({
   itemsPerPage,
   totalItems,
   onPageChange,
+  onItemsPerPageChange,
 }) => {
   // TODO: When a user deletes the first entry of a table the table is empty, it doesn't refresh and also the next button that's disabled somehow unlocks allowing the user to continue to navigate to empty pages until page refresh
 
@@ -106,6 +107,13 @@ const Pagination = ({
   //   onPageChange(1, newSize); // reset to first page when changing page size, empty state prevention
   // };
 
+  // this rerenders table pages and allows UI to update properly now based on first or last page entries
+  useEffect(() => {
+    if (totalItems > 0 && currentPage > totalPages) {
+      onPageChange(totalPages);
+    }
+  }, [totalItems, currentPage, totalPages, onPageChange]);
+
   return (
     <>
       <div className="mt-2">
@@ -130,9 +138,9 @@ const Pagination = ({
             )}
 
             {/* Items per page dropdown */}
-            {/* <select
-              value={localItemsPerPage}
-              onChange={handleItemsPerPageChange}
+            <select
+              value={itemsPerPage}
+              onChange={(e) => onItemsPerPageChange(Number(e.target.value))}
               className="bg-gray-50 border border-gray-300 text-gray-700 py-1 px-2 rounded text-sm focus:ring-blue-500 focus:border-blue-500"
               aria-label="Items per page"
             >
@@ -141,7 +149,7 @@ const Pagination = ({
                   Show {size}
                 </option>
               ))}
-            </select> */}
+            </select>
           </div>
 
           {/* Page navigation buttons */}

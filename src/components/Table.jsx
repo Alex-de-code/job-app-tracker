@@ -1,5 +1,7 @@
 import JobCard from "./JobCard.jsx";
 import { MdAddBox } from "react-icons/md";
+import { RiSortAlphabetDesc, RiSortAlphabetAsc } from "react-icons/ri";
+
 import { useEffect, useState } from "react";
 import JobAppForm from "./JobAppForm.jsx";
 import { supabase } from "../supabase-client.js";
@@ -15,6 +17,8 @@ const Table = ({
   onPageChange,
   onItemsPerPageChange,
   isLoading,
+  sortConfig,
+  onSort,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -156,6 +160,31 @@ const Table = ({
     }
   };
 
+  // const handleSortAlphabetically = async (sortField, ascending = true) => {
+  //   try {
+  //     // Get current user for security
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+
+  //     // Fetch data sorted alphabetically by the specified field
+  //     const { data, error } = await supabase
+  //       .from("job_applications")
+  //       .select("*")
+  //       .eq("user_id", user.id)
+  //       .order(sortField, { ascending: true });
+
+  //     if (error) throw error;
+
+  //     // Update state with sorted data
+  //     setJobApps(data);
+  //     setTotalItems(data.length);
+  //     onPageChange(1); // Reset to first page after sorting
+  //   } catch (error) {
+  //     console.error("Error sorting alphabetically:", error);
+  //   }
+  // };
+
   // this useEffect will refresh/update the jobApps array
   useEffect(() => {}, [jobApps, itemsPerPage, onPageChange]);
 
@@ -174,11 +203,24 @@ const Table = ({
   return (
     <>
       <div className="flex">
-        <div className="mr-1 mt-1">
-          {/* this will open the form for users to input a new job application */}
-          <button onClick={() => handleAddNew()}>
-            <MdAddBox className="size-9 hover:opacity-75" />
-          </button>
+        <div className="flex flex-col">
+          <div className="mr-1 mt-1">
+            {/* this will open the form for users to input a new job application */}
+            <button onClick={() => handleAddNew()}>
+              <MdAddBox className="size-9 hover:opacity-75" />
+            </button>
+          </div>
+          <div className="ml-0.5">
+            {/* this will open the form for users to input a new job application */}
+            <button onClick={() => onSort("companyTitle")}>
+              {sortConfig.key === "companyTitle" &&
+                (sortConfig.direction === "desc" ? (
+                  <RiSortAlphabetAsc className="size-8 hover:opacity-75" />
+                ) : (
+                  <RiSortAlphabetDesc className="size-8 hover:opacity-75" />
+                ))}
+            </button>
+          </div>
         </div>
         <div className="">
           <table className=" bg-slate-50 rounded-lg shadow-sm w-full table-fixed">

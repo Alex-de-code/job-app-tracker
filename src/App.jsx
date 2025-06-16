@@ -14,6 +14,13 @@ function App() {
   const [itemsPerPage, setItemsPerPage] = useState(10); // store # of job apps on page
   const [totalItems, setTotalItems] = useState(0); // count for all job apps
   const [isLoading, setIsLoading] = useState(false);
+  // state for storing our sorting for jobs apps in table
+  const [sortConfig, setSortConfig] = useState(() => {
+    const savedSort = localStorage.getItem("jobAppsSort");
+    return savedSort
+      ? JSON.parse(savedSort)
+      : { key: "created_at", direction: "desc" };
+  });
 
   const fetchJobApplications = async () => {
     if (!session?.user?.id) return; // Only fetch if user is logged in
@@ -25,7 +32,8 @@ function App() {
         .select("*", { count: "exact" }) // select all  + --> this also gives a count for all job apps at bttm left of pagination component
         .eq("user_id", session.user.id) // Only get current user's jobs
         .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1) // gives range we need for pagination
-        .order("created_at"); // order based on creation time
+        .order(sortConfig.key, { ascending: sortConfig.direction === "asc" });
+      // .order("created_at"); // order based on creation time
 
       if (error) throw error;
 
@@ -48,6 +56,27 @@ function App() {
   const logout = async () => {
     await supabase.auth.signOut();
     setJobApps([]); // Clear jobs on logout
+  };
+
+  // handler for sorting
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return {
+          ...prev,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      }
+      return { key, direction: "asc" };
+    });
+    setCurrentPage(1); // Reset to first page when sorting changes
+    console.log(sortConfig);
+  };
+
+  // itemsPerPage handler
+  const handleItemsPerPageChange = (newSize) => {
+    setItemsPerPage(newSize);
+    setCurrentPage(1); // Reset to first page when changing page size
   };
 
   useEffect(() => {
@@ -87,8 +116,12 @@ function App() {
     if (session) {
       fetchJobApplications();
     }
-  }, [session?.user?.id, currentPage, itemsPerPage]);
+  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
 
+  // This useEffect is for persisting sort config
+  useEffect(() => {
+    localStorage.setItem("jobAppsSort", JSON.stringify(sortConfig));
+  }, [sortConfig]);
   console.log(jobApps);
 
   return (
@@ -108,8 +141,10 @@ function App() {
                   totalItems={totalItems}
                   setTotalItems={setTotalItems}
                   onPageChange={setCurrentPage}
-                  onItemsPerPageChange={setItemsPerPage}
+                  onItemsPerPageChange={handleItemsPerPageChange}
                   isLoading={isLoading}
+                  sortConfig={sortConfig}
+                  onSort={handleSort}
                 />
               </div>
               <div className="w-1/3">
