@@ -25,6 +25,30 @@ const BenchmarksBentoBox = () => {
     { name: "Applied", value: 100, fill: "#90a4ae" },
   ];
 
+  // DUMMY data for daily reminder, in future can set this up in supabase to pull from there
+  // these quotes + future ones will be stored in a state in near future
+  const motivationalQuotes = [
+    "Remember: 10 minutes a day will make a world of a difference in 6 months.",
+    "Progress is progress, no matter how small. Keep going!",
+    "Every 'no' brings you closer to the right 'yes.' Stay persistent.",
+    "Your value isn’t defined by outcomes—it’s defined by your effort and resilience.",
+    "Small steps every day lead to big leaps over time. Trust the process.",
+    "Rejection is redirection. The right opportunity is coming.",
+    "You are more than your job search. Celebrate your growth along the way.",
+    "Consistency beats intensity. Keep showing up for yourself.",
+    "Your journey is unique. Don’t compare your chapter 1 to someone else’s chapter 20.",
+    "Believe in the version of you that’s on the other side of this grind.",
+    "Opportunities don’t happen by chance—you create them with action.",
+  ];
+
+  // need to add some logic so on rerenders the reminder of day doesn't change until next day
+  // think local storage, a daily seed based on date, will need a useeffect to handle as well
+  function RandomQuote() {
+    const randomQuote =
+      motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+    return <p>"{randomQuote}"</p>;
+  }
+
   return (
     <>
       <div className="h-full grid gri-cols-1 lg:grid-cols-2 grid-rows-8 lg:grid-rows-4 gap-3">
@@ -33,21 +57,25 @@ const BenchmarksBentoBox = () => {
           <div className="flex flex-row ">
             <div className="text-4xl font-bold mt-2">25</div>
             {/* TODO: Create conditional logic that when a user's target goal is reached they unlock this badge -- can set a default of 10 - 25 jobs  */}
-            <GiAchievement className="size-10 mt-2 text-amber-400" />
+            {/* <GiAchievement className="size-10 mt-2 text-amber-400" /> */}
           </div>
         </div>
 
         <div className="bg-white col-span-1 row-span-1 border border-gray-200 rounded-xl p-4 shadow">
-          <div className="text-gray-500 text-sm">Interview Rate</div>
+          <div className="text-slate-500 text-sm">Interview Rate</div>
           <div className="text-4xl mt-2 font-bold text-emerald-600">32%</div>
         </div>
-        <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
+        {/* <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Avg. Reply Time</div>
           <div className="text-4xl font-bold mt-2">8d</div>
-        </div>
+        </div> */}
         <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Total Applications</div>
           <div className="text-4xl font-bold mt-2">234</div>
+        </div>
+        <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
+          <div className="text-gray-500 text-sm">Daily Reminder</div>
+          <div className="text-md font-semibold mt-2">{RandomQuote()}</div>
         </div>
         <div className="col-span-2 row-span-2 bg-slate-50 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Application Status</div>
