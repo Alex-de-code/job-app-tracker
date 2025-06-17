@@ -1,15 +1,14 @@
+import { useEffect, useState } from "react";
+import { supabase } from "../supabase-client.js";
+import JobAppForm from "./JobAppForm.jsx";
 import JobCard from "./JobCard.jsx";
+import Pagination from "./Pagination.jsx";
 import { MdAddBox } from "react-icons/md";
 import { RiSortAlphabetDesc, RiSortAlphabetAsc } from "react-icons/ri";
 import {
   PiClockClockwiseBold,
   PiClockCounterClockwiseBold,
 } from "react-icons/pi";
-
-import { useEffect, useState } from "react";
-import JobAppForm from "./JobAppForm.jsx";
-import { supabase } from "../supabase-client.js";
-import Pagination from "./Pagination.jsx";
 
 const Table = ({
   jobApps,
@@ -35,11 +34,13 @@ const Table = ({
     created_at: null,
   });
 
+  // state for determing which piece of logic will run in form (add an entry vs. edit an entry)
   const [isEditing, setIsEditing] = useState(false);
 
   //state for tracking edit mode
   const [currentEditId, setCurrentEditId] = useState(null);
 
+  // adds job app information filled out in form to supabase backend + updates jobApps & totalItems
   const AddNewJobApp = async (newJob) => {
     // get current user
     const {
@@ -69,7 +70,7 @@ const Table = ({
 
     return data; // could potentially use this for a toast message
   };
-
+  // update an existing entry in our table and send those edits to supabase
   const UpdateJobApp = async (updatedJob) => {
     // get current user for security
     const {
@@ -92,6 +93,7 @@ const Table = ({
     );
   };
 
+  // handler to open job app form modal + reset it's state for a new entry
   const handleAddNew = () => {
     setIsEditing(false);
     setCurrentEditId(null);
@@ -105,6 +107,7 @@ const Table = ({
     setIsModalOpen(true);
   };
 
+  // handle editing a job app entry in our form
   const handleEdit = (selectedJob) => {
     const jobAppToEdit = jobApps.find((jobApp) => jobApp.id === selectedJob.id);
 
@@ -126,6 +129,7 @@ const Table = ({
     setIsModalOpen(true);
   };
 
+  // deletes an entry in supabase + frontend
   const handleDelete = async (selectedJobID) => {
     try {
       // Get current user for security check
@@ -164,41 +168,8 @@ const Table = ({
     }
   };
 
-  // const handleSortAlphabetically = async (sortField, ascending = true) => {
-  //   try {
-  //     // Get current user for security
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
-
-  //     // Fetch data sorted alphabetically by the specified field
-  //     const { data, error } = await supabase
-  //       .from("job_applications")
-  //       .select("*")
-  //       .eq("user_id", user.id)
-  //       .order(sortField, { ascending: true });
-
-  //     if (error) throw error;
-
-  //     // Update state with sorted data
-  //     setJobApps(data);
-  //     setTotalItems(data.length);
-  //     onPageChange(1); // Reset to first page after sorting
-  //   } catch (error) {
-  //     console.error("Error sorting alphabetically:", error);
-  //   }
-  // };
-
   // this useEffect will refresh/update the jobApps array
   useEffect(() => {}, [jobApps, itemsPerPage, onPageChange]);
-
-  // Quality of life features: Should add a function/bttn that reverses order of array based on most recent & latest job apps in array
-
-  // --> --> ---> --->
-
-  // TODO: Add pagination to job applications table, could be 10 entries, 15 or 25, but this is essential so that UI doesn't break b/c of too many entries!!!!
-
-  //TODO: Add filtering bttns to side of table under add job bttn, think oldest to newest, newest to oldest, alphabetical order, etc
 
   // TODO: WIll need to add feature where job application cards in table are clickable and open a view above page or new view altogether of all information of job application entry, this could be extensive info where table shows only essentials at a glance, maybe recruiter info, interview date, a hyperlink of actual job listing,
 
@@ -215,7 +186,7 @@ const Table = ({
             </button>
           </div>
           <div className="mr-2">
-            {/* this will open the form for users to input a new job application */}
+            {/* sort buttons based on alphabetical order */}
             <button onClick={() => onSort("companyTitle")}>
               {sortConfig.key === "companyTitle" &&
               sortConfig.direction === "desc" ? (
@@ -226,7 +197,7 @@ const Table = ({
             </button>
           </div>
           <div className="mr-2">
-            {" "}
+            {/* sort buttons based on entry date */}
             <button
               onClick={() => onSort("created_at")}
               className="flex items-center gap-1"

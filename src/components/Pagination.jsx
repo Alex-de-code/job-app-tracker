@@ -8,13 +8,8 @@ const Pagination = ({
   onPageChange,
   onItemsPerPageChange,
 }) => {
-  // TODO: When a user deletes the first entry of a table the table is empty, it doesn't refresh and also the next button that's disabled somehow unlocks allowing the user to continue to navigate to empty pages until page refresh
-
-  // TODO: On page refresh pages, get messed up and show trunctation and last page only sometimes, need to fix this
-  // TODO: Handle Items per change isn't working so number of job apps on table doesn't update, need to fix this
   // TODO: Also need to set pagination so it doesn't move as table height changes, this may be a fix for the table itself or in jobcard? Maybe we conditionally render the rest of table height so it reaches a point so pagination component is always aligned with the bottom view??
   // TODO: Change  boiler plate styling of pagination to be better suited for UI
-  // TODO: Count of entries doesn't update on front end, but on page refresh when another call is made to supabase it does, need to set a solution up on frontend so entries/job application count updates!
 
   // calculate total pages needed for table, based on item count & items per page
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -39,29 +34,6 @@ const Pagination = ({
 
   // local state for items per page dropdown
   const [localItemsPerPage, setLocalItemsPerPage] = useState(itemsPerPage);
-
-  // gives an array of page numbers to display, will also have truncation [...]
-  // const getPageNumbers = () => {
-  //   const pages = [];
-  //   const [start, end] = pageRange;
-
-  //   if (start > 1) {
-  //     pages.push(1); // show first page no matter what
-  //     if (start > 2) pages.push("..."); // if there's a gap greater than 1 show ...
-  //   }
-
-  //   // add visible range of pages
-  //   for (let i = start; i <= end && i <= totalPages; i++) {
-  //     pages.push(i);
-  //   }
-
-  //   // add truncation and last page if necessary
-  //   if (end < totalPages) {
-  //     if (end < totalPages - 1) pages.push("..."); // only show ... if gap is more than 1 page
-  //     pages.push(totalPages);
-  //   }
-  //   return pages;
-  // };
 
   const handlePageChange = (page) => {
     // Prevent navigation to truncation placeholder or current page
@@ -99,13 +71,6 @@ const Pagination = ({
     // Notify parent component
     onPageChange(page);
   };
-
-  // handles changing # of items per page
-  // const handleItemsPerPageChange = (e) => {
-  //   const newSize = Number(e.target.value);
-  //   setLocalItemsPerPage(newSize);
-  //   onPageChange(1, newSize); // reset to first page when changing page size, empty state prevention
-  // };
 
   // this rerenders table pages and allows UI to update properly now based on first or last page entries
   useEffect(() => {
@@ -170,24 +135,6 @@ const Pagination = ({
             >
               Previous
             </button>
-
-            {/* Page number buttons */}
-            {/* {getPageNumbers().map((page, i) => (
-              <button
-                key={i}
-                onClick={() => handlePageChange(page)}
-                className={`px-3 py-1 rounded-md border text-sm font-medium ${
-                  page === currentPage
-                    ? "bg-blue-500 text-white border-blue-500"
-                    : "bg-white border-gray-300 hover:bg-gray-50"
-                } ${
-                  page === "..." ? "pointer-events-none" : ""
-                } transition-colors`}
-                aria-current={page === currentPage ? "page" : undefined}
-              >
-                {page}
-              </button>
-            ))} */}
 
             <span className="text-sm px-2 text-gray-600">
               {totalPages ? (

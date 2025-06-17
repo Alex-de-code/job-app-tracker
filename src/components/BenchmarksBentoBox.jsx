@@ -1,6 +1,6 @@
 import React from "react";
-import { GiAchievement } from "react-icons/gi";
 import { PieChart, Pie, Sector, ResponsiveContainer, Legend } from "recharts";
+import { GiAchievement } from "react-icons/gi";
 
 const BenchmarksBentoBox = () => {
   // TODO: setup business logic in supabase for handling counters and sending back info so most up-to-date info is shown to the user -- & replace hard coded data with this

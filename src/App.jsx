@@ -1,28 +1,30 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Nav from "./components/Nav.jsx";
 import Table from "./components/Table.jsx";
-import { supabase } from "./supabase-client.js";
+import { supabase } from "./supabase-client.js"; // entrypoint to interact with the Supabase ecosystem
 import Auth from "./auth.jsx";
 import BenchmarksBentoBox from "./components/BenchmarksBentoBox.jsx";
 import Search from "./components/Search.jsx";
 
 function App() {
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState(null); // state for JWT access token + refresh token on user signin
   const [jobApps, setJobApps] = useState([]); // store all job applications
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1); // need a state for current page for rendering right job apps for pagination
   const [itemsPerPage, setItemsPerPage] = useState(10); // store # of job apps on page
   const [totalItems, setTotalItems] = useState(0); // count for all job apps
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // this state provides us with visibility on system status and allows us to implement spinners or any necessary indicators to users to show transitioning states (moments where data is being retrived) + UI updates
   // state for storing our sorting for jobs apps in table
   const [sortConfig, setSortConfig] = useState(() => {
     const savedSort = localStorage.getItem("jobAppsSort");
     return savedSort
-      ? JSON.parse(savedSort)
+      ? JSON.parse(savedSort) // here we parse a JSON str & convert it to an obj
       : { key: "created_at", direction: "desc" };
   });
+  //
 
-  const fetchJobApplications = async () => {
+  // We will memoize with useCallback so f(x) isn't rerendered unecessarily
+  const fetchJobApplications = useCallback(async () => {
     if (!session?.user?.id) return; // Only fetch if user is logged in
 
     setIsLoading(true);
@@ -45,13 +47,15 @@ function App() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
 
-  const fetchSession = async () => {
+  // we will use useCallback to memoize, store a cache so that React can reuse the cached value instead of recalculating -- for the sake of impoving performance and not having alot of rerenders for this function
+  // specifically useCallback is used to cache a function definition between re-renders
+  const fetchSession = useCallback(async () => {
     const currentSession = await supabase.auth.getSession();
-    console.log(currentSession);
+    // console.log(currentSession); // only comment in to debug
     setSession(currentSession.data.session);
-  };
+  }, []); // no reactive elements so there's an empty dependency array for our useCallback, in other cases, we'd add the reactive element so the function is re-rendered else the f(x) in memory will be rendered
 
   const logout = async () => {
     await supabase.auth.signOut();
@@ -110,7 +114,8 @@ function App() {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [fetchSession]); // b/c fetchSession is memoized and has no dependency array it is stable and will not cause infinite loop
+  // always good to include all used variables as dependencies, state, props, etc
 
   useEffect(() => {
     if (session) {
@@ -122,7 +127,6 @@ function App() {
   useEffect(() => {
     localStorage.setItem("jobAppsSort", JSON.stringify(sortConfig));
   }, [sortConfig]);
-  console.log(jobApps);
 
   return (
     <>

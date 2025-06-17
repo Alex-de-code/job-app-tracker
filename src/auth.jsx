@@ -23,25 +23,25 @@ const Auth = () => {
     // **** For PRODUCTION, comment out for debugging!!!
     // --> --> --->
 
-    // const { error: authError } = isSignUp
-    //   ? await supabase.auth.signUp({ email, password })
-    //   : await supabase.auth.signInWithPassword({ email, password });
+    const { error: authError } = isSignUp
+      ? await supabase.auth.signUp({ email, password })
+      : await supabase.auth.signInWithPassword({ email, password });
 
     // ------------------------------------------------------------
 
     //**** For DEBUGGING, comment this out for production!!!
     // --> --> --->
-    const { data: authData, error: authError } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password });
+    // const { data: authData, error: authError } = isSignUp
+    //   ? await supabase.auth.signUp({ email, password })
+    //   : await supabase.auth.signInWithPassword({ email, password });
 
-    console.log("Auth data:", authData); // For Debugging, Comment out for production!!!
-    console.log("Auth error:", authError); // For Debugging, Comment out for production!!!
+    // console.log("Auth data:", authData); // For Debugging, Comment out for production!!!
+    // console.log("Auth error:", authError); // For Debugging, Comment out for production!!!
 
-    const {
-      data: { session },
-    } = await supabase.auth.getSession(); // For DEBUGGING, comment out for production
-    console.log("Post-auth session:", session); // For DEBUGGING, comment out for production
+    // const {
+    //   data: { session },
+    // } = await supabase.auth.getSession(); // For DEBUGGING, comment out for production
+    // console.log("Post-auth session:", session); // For DEBUGGING, comment out for production
 
     // ---------------------------------------------------------
 
@@ -67,49 +67,49 @@ const Auth = () => {
   // **** For PRODUCTION only, comment out for debugging
   // ---> -----> ---->
 
-  // useEffect(() => {
-  //   // Production: Keep listener but remove logs
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((event, session) => {
-  //     // PROD: Silent handling
-  //     if (event === "SIGNED_OUT") {
-  //       // Clear user data
-  //     }
-  //   });
-
-  //   return () => subscription.unsubscribe();
-  // }, []);
-
-  //------------------------------------------------
-
-  // **** For DEBUGGING auth only, comment out for production
-  // ---> ---> --->
   useEffect(() => {
-    // check if a session exists
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("CURRENT SESSION:", session);
-    });
-
-    //setup listener for all future auth changes
+    // Production: Keep listener but remove logs
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("AUTH EVENT:", event, session);
+      // PROD: Silent handling
+      if (event === "SIGNED_OUT") {
+        // Clear user data
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  useEffect(() => {
-    const check = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setNeedsVerification(user && !user.email_confirmed_at);
-    };
-    check();
-  }, []);
+  //------------------------------------------------
+
+  // **** For DEBUGGING auth only, comment out for production
+  // ---> ---> --->
+  // useEffect(() => {
+  //   // check if a session exists
+  //   supabase.auth.getSession().then(({ data: { session } }) => {
+  //     console.log("CURRENT SESSION:", session);
+  //   });
+
+  //   //setup listener for all future auth changes
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     console.log("AUTH EVENT:", event, session);
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, []);
+
+  // useEffect(() => {
+  //   const check = async () => {
+  //     const {
+  //       data: { user },
+  //     } = await supabase.auth.getUser();
+  //     setNeedsVerification(user && !user.email_confirmed_at);
+  //   };
+  //   check();
+  // }, []);
 
   // ---------------------------------------------------------------
   return (
