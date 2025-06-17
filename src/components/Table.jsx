@@ -1,6 +1,10 @@
 import JobCard from "./JobCard.jsx";
 import { MdAddBox } from "react-icons/md";
 import { RiSortAlphabetDesc, RiSortAlphabetAsc } from "react-icons/ri";
+import {
+  PiClockClockwiseBold,
+  PiClockCounterClockwiseBold,
+} from "react-icons/pi";
 
 import { useEffect, useState } from "react";
 import JobAppForm from "./JobAppForm.jsx";
@@ -203,22 +207,42 @@ const Table = ({
   return (
     <>
       <div className="flex">
-        <div className="flex flex-col">
-          <div className="mr-1 mt-1">
+        <div className="flex flex-col gap-2 items-center">
+          <div className="mr-2">
             {/* this will open the form for users to input a new job application */}
             <button onClick={() => handleAddNew()}>
-              <MdAddBox className="size-9 hover:opacity-75" />
+              <MdAddBox className="text-black opacity-85 size-9 hover:opacity-75" />
             </button>
           </div>
-          <div className="ml-0.5">
+          <div className="mr-2">
             {/* this will open the form for users to input a new job application */}
             <button onClick={() => onSort("companyTitle")}>
               {sortConfig.key === "companyTitle" &&
-                (sortConfig.direction === "desc" ? (
-                  <RiSortAlphabetAsc className="size-8 hover:opacity-75" />
-                ) : (
-                  <RiSortAlphabetDesc className="size-8 hover:opacity-75" />
-                ))}
+              sortConfig.direction === "desc" ? (
+                <RiSortAlphabetAsc className="text-black opacity-85 size-8 hover:opacity-75" />
+              ) : (
+                <RiSortAlphabetDesc className="text-black opacity-85 size-8 hover:opacity-75" />
+              )}
+            </button>
+          </div>
+          <div className="mr-2">
+            {" "}
+            <button
+              onClick={() => onSort("created_at")}
+              className="flex items-center gap-1"
+            >
+              {sortConfig.key === "created_at" &&
+              sortConfig.direction === "desc" ? (
+                <span className="flex flex-col items-center ">
+                  <PiClockClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
+                  <p className="text-xs">Latest</p>
+                </span>
+              ) : (
+                <span className="flex flex-col items-center">
+                  <PiClockCounterClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
+                  <p className="text-xs">Earliest</p>
+                </span>
+              )}
             </button>
           </div>
         </div>
