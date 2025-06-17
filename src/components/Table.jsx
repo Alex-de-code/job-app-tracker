@@ -235,12 +235,12 @@ const Table = ({
               sortConfig.direction === "desc" ? (
                 <span className="flex flex-col items-center ">
                   <PiClockClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
-                  <p className="text-xs">Latest</p>
+                  <p className="text-xs font-medium text-gray-600">Latest</p>
                 </span>
               ) : (
                 <span className="flex flex-col items-center">
                   <PiClockCounterClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
-                  <p className="text-xs">Earliest</p>
+                  <p className="text-xs font-medium text-gray-600">Earliest</p>
                 </span>
               )}
             </button>
