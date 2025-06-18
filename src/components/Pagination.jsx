@@ -74,8 +74,8 @@ const Pagination = ({
 
   // this rerenders table pages and allows UI to update properly now based on first or last page entries
   useEffect(() => {
-    if (totalItems > 0 && currentPage > totalPages) {
-      onPageChange(totalPages);
+    if (totalItems > 0 && totalPages > 0 && currentPage > totalPages) {
+      onPageChange(totalPages); // don't need to memoize onPageChange since it's the state setter in app.jsx & React automatically stabilizes setters, they never change btwn rerenders
     }
   }, [totalItems, currentPage, totalPages, onPageChange]);
 

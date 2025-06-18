@@ -128,6 +128,15 @@ function App() {
     localStorage.setItem("jobAppsSort", JSON.stringify(sortConfig));
   }, [sortConfig]);
 
+  // for seeing rerenders when jobApps changes
+  useEffect(() => {
+    console.log("jobApps updated:", jobApps);
+
+    return () => {
+      console.log("Where the magic happens");
+    };
+  }, [jobApps]);
+
   return (
     <>
       <div className="min-h-screen bg-gray-200">
