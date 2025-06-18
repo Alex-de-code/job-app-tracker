@@ -54,7 +54,7 @@ const JobCard = ({ jobApps, onEdit, onDelete }) => {
               `Show me full detailed view for job application ${jobApp.id}`
             )
           }
-          className="hover:bg-slate-200"
+          className="hover:bg-slate-200 hover:border-y-0 hover:border-2 hover:border-slate-500"
         >
           <td className="py-2 px-3 text-sm">{jobApp.companyTitle}</td>
           <td className="py-2 px-3 text-sm truncate">{jobApp.role}</td>

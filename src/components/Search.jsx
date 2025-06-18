@@ -5,11 +5,13 @@ const Search = () => {
     <div>
       <form action="">
         <div className="flex flex-row items-center mb-3">
-          <div className="flex flex-row items-center rounded-xl ml-2 mr-3 flex-1">
-            <FaMagnifyingGlass className="mr-2" size={24} />
+          <div className="flex flex-row items-center rounded-lg mr-3 ml-13 flex-1 bg-white shadow">
+            <div className="ml-2 mr-2">
+              <FaMagnifyingGlass className="text-black opacity-75" size={24} />
+            </div>
             <input
               type="text"
-              className="bg-slate-50 rounded-lg p-2  shadow-sm w-full"
+              className=" rounded-tr-lg rounded-br-lg p-2  w-full"
             />
           </div>
           <div className="ml-auto">

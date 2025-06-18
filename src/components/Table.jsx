@@ -190,9 +190,15 @@ const Table = ({
             <button onClick={() => onSort("companyTitle")}>
               {sortConfig.key === "companyTitle" &&
               sortConfig.direction === "desc" ? (
-                <RiSortAlphabetAsc className="text-black opacity-85 size-8 hover:opacity-75" />
+                <span className="flex flex-col items-center hover:opacity-75">
+                  <RiSortAlphabetAsc className="text-black opacity-65 size-7 " />
+                  <p className="text-xs font-medium text-gray-500">Descend</p>
+                </span>
               ) : (
-                <RiSortAlphabetDesc className="text-black opacity-85 size-8 hover:opacity-75" />
+                <span className="flex flex-col items-center hover:opacity-75">
+                  <RiSortAlphabetDesc className="text-black opacity-65 size-7 " />
+                  <p className="text-xs font-medium text-gray-500">Ascend</p>
+                </span>
               )}
             </button>
           </div>
@@ -204,21 +210,21 @@ const Table = ({
             >
               {sortConfig.key === "created_at" &&
               sortConfig.direction === "desc" ? (
-                <span className="flex flex-col items-center ">
-                  <PiClockClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
-                  <p className="text-xs font-medium text-gray-600">Latest</p>
+                <span className="flex flex-col items-center hover:opacity-75">
+                  <PiClockClockwiseBold className="text-black opacity-65 size-6 " />
+                  <p className="text-xs font-medium text-gray-500">Latest</p>
                 </span>
               ) : (
-                <span className="flex flex-col items-center">
-                  <PiClockCounterClockwiseBold className="text-black opacity-85 size-7 hover:opacity-75" />
-                  <p className="text-xs font-medium text-gray-600">Earliest</p>
+                <span className="flex flex-col items-center hover:opacity-75">
+                  <PiClockCounterClockwiseBold className="text-black opacity-65 size-6 " />
+                  <p className="text-xs font-medium text-gray-500">Earliest</p>
                 </span>
               )}
             </button>
           </div>
         </div>
         <div className="">
-          <table className=" bg-slate-50 rounded-lg shadow-sm w-full table-fixed">
+          <table className=" bg-slate-50 rounded-lg shadow-sm w-full table-fixed ">
             <thead className="border-b-2 border-slate-200">
               <tr className="">
                 <th className="text-sm p-3 tracking-wide text-left">
