@@ -14,7 +14,10 @@ const Nav = ({ logout }) => {
               </span>
             </div>
 
-            <div className="ml-auto">
+            <div className="ml-auto flex items-center ">
+              <button className="py-0.5 px-2 bg-white rounded hover:bg-gray-200 mx-10">
+                Settings
+              </button>
               <button
                 onClick={logout}
                 className="p-1 bg-white rounded hover:bg-gray-200"
