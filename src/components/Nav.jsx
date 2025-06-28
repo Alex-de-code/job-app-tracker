@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 
 import { VscSignOut } from "react-icons/vsc";
 import { MdListAlt } from "react-icons/md";
+import { MdOutlineSettings } from "react-icons/md";
 
 const Nav = ({ logout }) => {
   return (
@@ -19,17 +20,21 @@ const Nav = ({ logout }) => {
             <div className="ml-auto flex items-center ">
               <Link
                 to={"/settings"}
-                className="py-0.5 px-2 bg-white rounded hover:bg-gray-200 mx-10"
+                className="p-1 rounded  hover:border-y-2
+                 hover:border-white mx-5 text-white"
               >
-                Settings
+                <div className="flex justify-between">
+                  <MdOutlineSettings className="size-5" />
+                  <h3 className="text-sm ml-0.5">Settings</h3>
+                </div>
               </Link>
               <button
                 onClick={logout}
-                className="p-1 bg-white rounded hover:bg-gray-200"
+                className="p-1.5 bg-white rounded hover:bg-gray-200"
               >
                 <div className="flex justify-between">
                   <VscSignOut className="size-5" />
-                  <span className="text-sm ml-1">Logout</span>
+                  <h3 className="text-sm ml-0.5">Logout</h3>
                 </div>
               </button>
             </div>
