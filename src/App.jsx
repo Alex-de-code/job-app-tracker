@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import "./App.css";
-import Nav from "./components/Nav.jsx";
-import Table from "./components/Table.jsx";
+import { Routes, Route } from "react-router-dom";
 import { supabase } from "./supabase-client.js"; // entrypoint to interact with the Supabase ecosystem
+import Nav from "./components/Nav.jsx";
+import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Auth from "./auth.jsx";
-import BenchmarksBentoBox from "./components/BenchmarksBentoBox.jsx";
-import Search from "./components/Search.jsx";
+import "./App.css";
 
 function App() {
   const [session, setSession] = useState(null); // state for JWT access token + refresh token on user signin
@@ -143,27 +142,26 @@ function App() {
         {session ? (
           <>
             <Nav logout={logout} />
-            <div className="flex w-full p-4 gap-4 pt-18">
-              <div className="w-2/3">
-                <Search />
-                <Table
-                  jobApps={jobApps}
-                  setJobApps={setJobApps}
-                  currentPage={currentPage}
-                  itemsPerPage={itemsPerPage}
-                  totalItems={totalItems}
-                  setTotalItems={setTotalItems}
-                  onPageChange={setCurrentPage}
-                  onItemsPerPageChange={handleItemsPerPageChange}
-                  isLoading={isLoading}
-                  sortConfig={sortConfig}
-                  onSort={handleSort}
-                />
-              </div>
-              <div className="w-1/3">
-                <BenchmarksBentoBox />
-              </div>
-            </div>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <Dashboard
+                    jobApps={jobApps}
+                    setJobApps={setJobApps}
+                    currentPage={currentPage}
+                    itemsPerPage={itemsPerPage}
+                    totalItems={totalItems}
+                    setTotalItems={setTotalItems}
+                    onPageChange={setCurrentPage}
+                    onItemsPerPageChange={handleItemsPerPageChange}
+                    isLoading={isLoading}
+                    sortConfig={sortConfig}
+                    onSort={handleSort}
+                  />
+                }
+              />
+            </Routes>
           </>
         ) : (
           <Auth />

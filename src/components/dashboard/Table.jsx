@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../supabase-client.js";
-import JobAppForm from "./JobAppForm.jsx";
+import { supabase } from "../../supabase-client.js";
+import JobAppForm from "../JobAppForm.jsx";
 import JobCard from "./JobCard.jsx";
 import Pagination from "./Pagination.jsx";
 import { MdAddBox } from "react-icons/md";
