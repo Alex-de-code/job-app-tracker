@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 import { VscSignOut } from "react-icons/vsc";
 import { MdListAlt } from "react-icons/md";
 
@@ -7,17 +9,20 @@ const Nav = ({ logout }) => {
       <div className="fixed top-0 left-0 right-0">
         <div className="bg-black/75 p-3 w-full shadow">
           <div className="flex flex-row items-center">
-            <div className=" rounded-xl flex justify-center">
+            <Link to={"/"} className=" rounded-xl flex justify-center">
               <span className="flex flex-row items-center text-white">
                 <MdListAlt className="size-7 text-white text-shadow-2xs" />
                 <h3 className="text-lg ml-1  text-shadow-2xs">JTrack</h3>
               </span>
-            </div>
+            </Link>
 
             <div className="ml-auto flex items-center ">
-              <button className="py-0.5 px-2 bg-white rounded hover:bg-gray-200 mx-10">
+              <Link
+                to={"/settings"}
+                className="py-0.5 px-2 bg-white rounded hover:bg-gray-200 mx-10"
+              >
                 Settings
-              </button>
+              </Link>
               <button
                 onClick={logout}
                 className="p-1 bg-white rounded hover:bg-gray-200"

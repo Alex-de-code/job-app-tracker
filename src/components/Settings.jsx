@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Settings = () => {
   return (
     <>
@@ -22,13 +24,13 @@ const Settings = () => {
         </div>
 
         {/* Content area */}
-        <div className="md:col-span-2">
+        {/* <div className="md:col-span-2">
           <Route path="/settings/goals" component={GoalSettings} />
           <Route
             path="/settings/notifications"
             component={NotificationSettings}
           />
-        </div>
+        </div> */}
       </div>
     </>
   );

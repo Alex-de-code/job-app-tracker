@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { supabase } from "./supabase-client.js"; // entrypoint to interact with the Supabase ecosystem
 import Nav from "./components/Nav.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
+import Settings from "./components/Settings.jsx";
 import Auth from "./auth.jsx";
 import "./App.css";
 
@@ -161,6 +162,7 @@ function App() {
                   />
                 }
               />
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </>
         ) : (
