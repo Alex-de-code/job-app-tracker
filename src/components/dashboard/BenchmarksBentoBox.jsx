@@ -7,6 +7,7 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
   const [weeklyGoal, setWeeklyGoal] = useState(25); // Default
   const [currentApplications, setCurrentApplications] = useState(0);
   const [totalApps, setTotalApps] = useState(0); // counter of all job applications
+  const [interviewRate, setInterviewRate] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -127,6 +128,45 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
     fetchCount();
   }, [refreshKey]);
 
+  useEffect(() => {
+    const calculateRates = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
+
+      try {
+        // 1. Get counts in a single query (most efficient)
+        const { count: totalApps } = await supabase
+          .from("job_applications")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id);
+
+        const { count: interviewingApps } = await supabase
+          .from("job_applications")
+          .select("*", { count: "exact", head: true })
+          .eq("user_id", user.id)
+          .ilike("status", "%interview%"); // Case-insensitive match
+
+        // 2. Compute percentage
+        const rate =
+          totalApps > 0 ? Math.round((interviewingApps / totalApps) * 100) : 0;
+
+        setInterviewRate(rate);
+      } catch (err) {
+        console.error("Calculation failed:", err);
+        setInterviewRate(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    calculateRates();
+
+    // Refresh every 2 minutes (adjust as needed)
+    // const pollInterval = setInterval(calculateRates, 120000);
+    // return () => clearInterval(pollInterval);
+  }, [refreshKey]);
   // this useEffect will refresh/update the benchmarkbento
   // useEffect(() => {}, [jobApps]);
 
@@ -194,7 +234,12 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
 
         <div className="bg-white col-span-1 row-span-1 border border-gray-200 rounded-xl p-4 shadow">
           <div className="text-slate-500 text-sm">Interview Rate</div>
-          <div className="text-4xl mt-2 font-bold text-emerald-600">32%</div>
+          <div className="text-4xl mt-2 font-bold text-emerald-600">
+            <span>
+              {interviewRate}
+              <span className="ml-0.5 text-2xl">%</span>{" "}
+            </span>
+          </div>
         </div>
         {/* <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Avg. Reply Time</div>
