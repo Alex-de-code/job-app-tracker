@@ -18,6 +18,7 @@ const Nav = ({ logout }) => {
             </Link>
 
             <div className="ml-auto flex items-center ">
+              <p className="text-white">Welcome, Tracker!</p>
               <Link
                 to={"/settings"}
                 className="p-1 rounded  hover:border-y-2

@@ -11,6 +11,7 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // adding loading state to prevent duplicate submissions
   const [needsVerification, setNeedsVerification] = useState(false); // state for verification banner aftr sign up
@@ -23,7 +24,7 @@ const Auth = () => {
     // **** For PRODUCTION, comment out for debugging!!!
     // --> --> --->
 
-    const { error: authError } = isSignUp
+    const { data: authData, error: authError } = isSignUp
       ? await supabase.auth.signUp({ email, password })
       : await supabase.auth.signInWithPassword({ email, password });
 
