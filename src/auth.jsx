@@ -49,11 +49,27 @@ const Auth = () => {
     if (isSignUp && authData?.user) {
       setNeedsVerification(true); // update verification banner state
       // setError(`Verification email sent to ${email}. Please check your inbox.`);
-      await supabase.from("users").insert({
+      // Create profile and goals in a transaction
+      const { error: dbError } = await supabase.from("users").insert({
         id: authData.user.id,
         email: authData.user.email,
         created_at: new Date().toISOString(),
       });
+
+      if (!dbError) {
+        // Create default goals
+        await supabase.from("user_goals").upsert(
+          {
+            id: authData.user.id,
+            weekly_target: 25,
+            daily_target: 5,
+            updated_at: new Date().toISOString(),
+          },
+          {
+            onConflict: "id",
+          }
+        );
+      }
     }
 
     setLoading(false);

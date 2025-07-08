@@ -1,8 +1,116 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { supabase } from "../../supabase-client";
 import { PieChart, Pie, Sector, ResponsiveContainer, Legend } from "recharts";
 import { GiAchievement } from "react-icons/gi";
 
 const BenchmarksBentoBox = () => {
+  const [weeklyGoal, setWeeklyGoal] = useState(25); // Default
+  const [currentApplications, setCurrentApplications] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch user's weekly goal and current application count
+  // useEffect(() => {
+  //   const fetchUserGoals = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const {
+  //         data: { user },
+  //       } = await supabase.auth.getUser();
+
+  //       if (!user) return;
+
+  //       // Get weekly target ----> SHOULD MIGRATE THIS LOGIC FOR CALCULATING COUNT TO BACKEND IN POSTGRESQL FOR PRODUCTION + SCALING
+  //       const { data: goalsData } = await supabase
+  //         .from("user_goals")
+  //         .select("weekly_target")
+  //         .eq("id", user.id)
+  //         .single();
+
+  //       if (goalsData) {
+  //         setWeeklyGoal(goalsData.weekly_target);
+  //       }
+
+  //       // Get current week's applications count (you'll need to implement this)
+  //       // This assumes you have an applications table with timestamps
+  //       const { count } = await supabase
+  //         .from("applications")
+  //         .select("*", { count: "exact" })
+  //         .gte("created_at", getStartOfWeek()) // You need a helper function
+  //         .lte("created_at", getEndOfWeek()); // For the current week's range
+
+  //       setCurrentApplications(count || 0);
+  //     } catch (error) {
+  //       console.error("Error fetching goals:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchUserGoals();
+  // }, []);
+
+  // Calculate start/end of week directly in component
+  const getWeekRange = () => {
+    const now = new Date();
+    const day = now.getDay(); // 0 (Sun) to 6 (Sat)
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1); // Adjust to Monday
+    const start = new Date(now.setDate(diff));
+    const end = new Date(start);
+    end.setDate(start.getDate() + 6);
+
+    return {
+      start: start.toISOString().split("T")[0], // YYYY-MM-DD
+      end: end.toISOString().split("T")[0],
+    };
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // 1. Get authenticated user
+        const {
+          data: { user },
+          error: authError,
+        } = await supabase.auth.getUser();
+        if (authError || !user)
+          throw new Error(authError?.message || "Not logged in");
+
+        // 2. Get user's weekly goal
+        const { data: goalData, error: goalError } = await supabase
+          .from("user_goals")
+          .select("weekly_target")
+          .eq("id", user.id)
+          .single();
+
+        if (goalError) throw goalError;
+        if (goalData) setWeeklyGoal(goalData.weekly_target);
+
+        // 3. Get this week's applications
+        const { start, end } = getWeekRange();
+        const { count, error: countError } = await supabase
+          .from("job_applications")
+          .select("*", { count: "exact" })
+          .eq("user_id", user.id) // Critical for security
+          .gte("created_at", `${start}T00:00:00`)
+          .lte("created_at", `${end}T23:59:59`);
+
+        if (countError) throw countError;
+        setCurrentApplications(count || 0);
+      } catch (err) {
+        setError(err.message);
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   // TODO: setup business logic in supabase for handling counters and sending back info so most up-to-date info is shown to the user -- & replace hard coded data with this
 
   // TODO: Create conditional logic that when a user's target goal is reached they unlock this badge -- can set a default of 10 - 25 jobs
@@ -55,7 +163,11 @@ const BenchmarksBentoBox = () => {
         <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Weekly Applications</div>
           <div className="flex flex-row ">
-            <div className="text-4xl font-bold mt-2">25</div>
+            <div className="text-4xl font-bold mt-2">
+              {loading ? "--" : currentApplications}
+              <span className="text-lg text-gray-500 ml-1">/ {weeklyGoal}</span>
+            </div>
+            {/* <div className="text-4xl font-bold mt-2">{weeklyGoal}</div> */}
             {/* TODO: Create conditional logic that when a user's target goal is reached they unlock this badge -- can set a default of 10 - 25 jobs  */}
             {/* <GiAchievement className="size-10 mt-2 text-amber-400" /> */}
           </div>
