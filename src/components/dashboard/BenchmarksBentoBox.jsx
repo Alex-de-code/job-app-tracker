@@ -3,9 +3,10 @@ import { supabase } from "../../supabase-client";
 import { PieChart, Pie, Sector, ResponsiveContainer, Legend } from "recharts";
 import { GiAchievement } from "react-icons/gi";
 
-const BenchmarksBentoBox = () => {
+const BenchmarksBentoBox = ({ refreshKey }) => {
   const [weeklyGoal, setWeeklyGoal] = useState(25); // Default
   const [currentApplications, setCurrentApplications] = useState(0);
+  const [totalApps, setTotalApps] = useState(0); // counter of all job applications
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -109,7 +110,25 @@ const BenchmarksBentoBox = () => {
     };
 
     fetchData();
-  }, []);
+  }, [refreshKey]);
+
+  useEffect(() => {
+    const fetchCount = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const { count } = await supabase
+        .from("job_applications")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user.id);
+      setTotalApps(count || 0);
+    };
+
+    fetchCount();
+  }, [refreshKey]);
+
+  // this useEffect will refresh/update the benchmarkbento
+  // useEffect(() => {}, [jobApps]);
 
   // TODO: setup business logic in supabase for handling counters and sending back info so most up-to-date info is shown to the user -- & replace hard coded data with this
 
@@ -183,7 +202,7 @@ const BenchmarksBentoBox = () => {
         </div> */}
         <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Total Applications</div>
-          <div className="text-4xl font-bold mt-2">234</div>
+          <div className="text-4xl font-bold mt-2">{totalApps}</div>
         </div>
         <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Daily Reminder</div>

@@ -22,6 +22,7 @@ const Table = ({
   isLoading,
   sortConfig,
   onSort,
+  onApplicationSubmit,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -67,6 +68,8 @@ const Table = ({
 
     // Update frontend state with data from Supabase
     setJobApps((prev) => [...prev, data]);
+
+    onApplicationSubmit();
 
     return data; // could potentially use this for a toast message
   };
@@ -158,6 +161,8 @@ const Table = ({
 
       // Update frontend state of total job app entries from user for faster UI
       setTotalItems((prev) => prev - 1); // Decrement count
+
+      onApplicationSubmit();
 
       // Handle pagination after deletion
       if (isLastItemOnPage && isLastPage && currentPage > 1) {
@@ -275,6 +280,7 @@ const Table = ({
                     jobApps={jobApps}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    onApplicationSubmit={onApplicationSubmit}
                   />
                   {/* Row fills so length of table stays the same */}
                   {jobApps.length < itemsPerPage && // here we check if we have fewer jobs than items per page
@@ -327,6 +333,7 @@ const Table = ({
             currentEditId={currentEditId}
             setCurrentEditId={setCurrentEditId}
             UpdateJobApp={UpdateJobApp}
+            onApplicationSubmit={onApplicationSubmit}
           />
         </div>
       </div>

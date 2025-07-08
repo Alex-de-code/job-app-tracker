@@ -132,7 +132,7 @@ const Settings = () => {
                   onChange={(e) => setWeeklyGoal(Number(e.target.value))}
                   className="mt-1 block w-full p-2 text-base border-gray-300 sm:text-sm rounded-md hover:bg-slate-300"
                 >
-                  {[5, 10, 15, 20, 25, 30].map((num) => (
+                  {[10, 15, 20, 25, 30, 35, 40, 45, 50].map((num) => (
                     <option key={num} value={num}>
                       {num} applications
                     </option>
