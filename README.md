@@ -13,3 +13,4 @@ Currently building out features + functionality.
 - [May 26th, 2025](https://www.loom.com/share/72789b9943c8478aab42cdf475078cb3)
 - [June 5th, 2025](https://www.loom.com/share/ea90be5a19c742c0b9a65992995549db)
 - [June 13th, 2025](https://www.loom.com/share/52bc8c574bd54ba9abb5118517d2bf6f)
+- [July 8th, 2025](https://www.loom.com/share/bbc0e47619b84e9f8a910f3b49d61080)
