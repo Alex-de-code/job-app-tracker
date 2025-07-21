@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../supabase-client";
-import { PieChart, Pie, Sector, ResponsiveContainer, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Sector,
+  ResponsiveContainer,
+  Legend,
+  Label,
+  LabelList,
+} from "recharts";
 import { GiAchievement } from "react-icons/gi";
 
 const BenchmarksBentoBox = ({ refreshKey }) => {
@@ -8,6 +16,12 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
   const [currentApplications, setCurrentApplications] = useState(0);
   const [totalApps, setTotalApps] = useState(0); // counter of all job applications
   const [interviewRate, setInterviewRate] = useState(0);
+  const [distributionOfAllApps, setDistributionOfAllApps] = useState({
+    applied: 0,
+    interviewing: 0,
+    accepted: 0,
+    denied: 0,
+  }); // will have keys in this state pertaining to each type of application status for chart
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -167,6 +181,46 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
     // const pollInterval = setInterval(calculateRates, 120000);
     // return () => clearInterval(pollInterval);
   }, [refreshKey]);
+
+  useEffect(() => {
+    const fetchAppDistribution = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser(); // get current user
+      const { data, error } = await supabase
+        .from("job_applications")
+        .select("status")
+        .eq("user_id", user.id);
+
+      if (error) {
+        console.error("Fetch error:", error);
+        return;
+      }
+
+      // calculate counts
+      // const counts = { applied: 0, interviewing: 0, accepted: 0, denied: 0 };
+      // data.forEach((app) => counts[app.status]++);
+      const counts = {
+        applied: data.filter((app) => app.status === "Applied").length,
+        interviewing: data.filter((app) => app.status === "Interviewing")
+          .length,
+        accepted: data.filter((app) => app.status === "Accepted").length,
+        denied: data.filter((app) => app.status === "Denied").length,
+      };
+
+      // Convert to PieChart-compatible format
+      const pieData = [
+        { name: "Applied", value: counts.applied, fill: "#90a4ae" },
+        { name: "Interviewing", value: counts.interviewing, fill: "#ffdf20" },
+        { name: "Accepted", value: counts.accepted, fill: "#05df72" },
+        { name: "Denied", value: counts.denied, fill: "#ff6467" },
+      ];
+
+      setDistributionOfAllApps(pieData);
+    };
+
+    fetchAppDistribution();
+  }, [refreshKey]);
   // this useEffect will refresh/update the benchmarkbento
   // useEffect(() => {}, [jobApps]);
 
@@ -185,12 +239,12 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
   // once pie chart is live will need a condiitional rednder for when there is no data yet in system of user job apps
 
   //DUmmy data for pie chart
-  const data = [
-    { name: "Accepted", value: 300, fill: "#05df72" },
-    { name: "Interviewing", value: 200, fill: "#ffdf20" },
-    { name: "Denied", value: 500, fill: "#ff6467" },
-    { name: "Applied", value: 100, fill: "#90a4ae" },
-  ];
+  // const data = [
+  //   { name: "Accepted", value: 300, fill: "#05df72" },
+  //   { name: "Interviewing", value: 200, fill: "#ffdf20" },
+  //   { name: "Denied", value: 500, fill: "#ff6467" },
+  //   { name: "Applied", value: 100, fill: "#90a4ae" },
+  // ];
 
   // DUMMY data for daily reminder, in future can set this up in supabase to pull from there
   // these quotes + future ones will be stored in a state in near future
@@ -218,7 +272,7 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
 
   return (
     <>
-      <div className="h-full grid gri-cols-1 lg:grid-cols-2 grid-rows-8 lg:grid-rows-4 gap-3">
+      <div className="h-full grid md:grid-flow-col lg:grid-flow-dense grid-cols-3 md:grid-cols-1 lg:grid-cols-2 md:grid-rows-6 lg:grid-rows-4 gap-3">
         <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Weekly Applications</div>
           <div className="flex flex-row ">
@@ -249,11 +303,11 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
           <div className="text-gray-500 text-sm">Total Applications</div>
           <div className="text-4xl font-bold mt-2">{totalApps}</div>
         </div>
-        <div className="bg-white col-span-1 row-span-1 rounded-xl p-4 shadow">
+        <div className="bg-white hidden md:block md:col-span-1 row-span-1 rounded-xl p-4 shadow ">
           <div className="text-gray-500 text-sm">Daily Reminder</div>
           <div className="text-md font-semibold mt-2">{RandomQuote()}</div>
         </div>
-        <div className="col-span-2 row-span-2 bg-slate-50 rounded-xl p-4 shadow">
+        <div className="col-span-3 md:col-span-2 row-span-3 md:row-span-2 bg-slate-50 rounded-xl p-4 shadow">
           <div className="text-gray-500 text-sm">Application Status</div>
 
           {/* <div className="bg-white border border-gray-200 rounded-xl p-4 shadow"> */}
@@ -265,12 +319,13 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
             <PieChart
               width={300}
               height={230}
+
               // margin={{ top: 10, right: 0, left: 50, bottom: 0 }}
             >
               <Pie
                 // activeIndex={this.state.activeIndex}
                 // activeShape={renderActiveShape}
-                data={data}
+                data={distributionOfAllApps}
                 cx="49%"
                 cy="47%"
                 innerRadius={53}
@@ -280,7 +335,15 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
                 dataKey="value"
                 paddingAngle={3}
                 strokeWidth={1}
+                // label={({ name, percent }) =>
+                //   `${(percent * 100).toFixed(0)}%`
+                // }
                 label
+                labelLine={{
+                  strokeWidth: 2,
+                  length: 10, // Shortens the label line
+                  lengthOuter: 1, // Controls how far the line extends beyond the pie
+                }}
                 // labelLine={false}
               />
               <Legend

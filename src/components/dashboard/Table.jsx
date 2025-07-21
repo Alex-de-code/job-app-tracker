@@ -197,12 +197,16 @@ const Table = ({
               sortConfig.direction === "desc" ? (
                 <span className="flex flex-col items-center hover:opacity-75">
                   <RiSortAlphabetAsc className="text-black opacity-65 size-7 " />
-                  <p className="text-xs font-medium text-gray-500">Descend</p>
+                  <p className="hidden md:block text-xs font-medium text-gray-500">
+                    Descend
+                  </p>
                 </span>
               ) : (
                 <span className="flex flex-col items-center hover:opacity-75">
                   <RiSortAlphabetDesc className="text-black opacity-65 size-7 " />
-                  <p className="text-xs font-medium text-gray-500">Ascend</p>
+                  <p className="hidden md:block  text-xs font-medium text-gray-500">
+                    Ascend
+                  </p>
                 </span>
               )}
             </button>
@@ -217,12 +221,16 @@ const Table = ({
               sortConfig.direction === "desc" ? (
                 <span className="flex flex-col items-center hover:opacity-75">
                   <PiClockClockwiseBold className="text-black opacity-65 size-6 " />
-                  <p className="text-xs font-medium text-gray-500">Latest</p>
+                  <p className="hidden md:block  text-xs font-medium text-gray-500">
+                    Latest
+                  </p>
                 </span>
               ) : (
                 <span className="flex flex-col items-center hover:opacity-75">
                   <PiClockCounterClockwiseBold className="text-black opacity-65 size-6 " />
-                  <p className="text-xs font-medium text-gray-500">Earliest</p>
+                  <p className="hidden md:block  text-xs font-medium text-gray-500">
+                    Earliest
+                  </p>
                 </span>
               )}
             </button>
@@ -236,7 +244,7 @@ const Table = ({
                   Company Title
                 </th>
                 <th className=" text-sm p-3 tracking-wide text-left">Role</th>
-                <th className="text-sm p-3 tracking-wide text-left">
+                <th className="hidden lg:table-cell text-sm p-3 tracking-wide text-left">
                   Description
                 </th>
                 <th className=" text-sm p-3 tracking-wide text-left">Status</th>

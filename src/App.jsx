@@ -21,6 +21,9 @@ function App() {
       ? JSON.parse(savedSort) // here we parse a JSON str & convert it to an obj
       : { key: "created_at", direction: "desc" };
   });
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   //
 
   // We will memoize with useCallback so f(x) isn't rerendered unecessarily
@@ -48,6 +51,38 @@ function App() {
       setIsLoading(false);
     }
   }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
+  // const fetchJobApplications = useCallback(async () => {
+  //   if (!session?.user?.id) return;
+
+  //   setIsLoading(true);
+  //   try {
+  //     let query = supabase
+  //       .from("job_applications")
+  //       .select("*", { count: "exact" })
+  //       .eq("user_id", session.user.id)
+  //       .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1)
+  //       .order(sortConfig.key, { ascending: sortConfig.direction === "asc" });
+
+  //     // Add search filter if searchTerm exists
+  //     if (searchTerm) {
+  //       query = query.or(
+  //         `company_name.ilike.%${searchTerm}%,job_title.ilike.%${searchTerm}%`
+  //       );
+  //     }
+
+  //     const { error, data, count } = await query;
+
+  //     if (error) throw error;
+
+  //     setJobApps(data || []);
+  //     setTotalItems(count || 0);
+  //   } catch (error) {
+  //     console.error("Error reading task: ", error.message);
+  //     return;
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }, [session?.user?.id, currentPage, itemsPerPage, sortConfig, searchTerm]); // Add searchTerm to dependencies
 
   // we will use useCallback to memoize, store a cache so that React can reuse the cached value instead of recalculating -- for the sake of impoving performance and not having alot of rerenders for this function
   // specifically useCallback is used to cache a function definition between re-renders
@@ -81,6 +116,14 @@ function App() {
   const handleItemsPerPageChange = (newSize) => {
     setItemsPerPage(newSize);
     setCurrentPage(1); // Reset to first page when changing page size
+  };
+
+  const handleSearch = async (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1); // Reset to first page on new searches
+    await fetchJobApplications(); // Explicit fetch
+
+    // setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {
@@ -121,7 +164,7 @@ function App() {
     if (session) {
       fetchJobApplications();
     }
-  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
+  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig, searchTerm]);
 
   // This useEffect is for persisting sort config
   useEffect(() => {
@@ -159,6 +202,7 @@ function App() {
                     isLoading={isLoading}
                     sortConfig={sortConfig}
                     onSort={handleSort}
+                    onSearch={handleSearch}
                   />
                 }
               />

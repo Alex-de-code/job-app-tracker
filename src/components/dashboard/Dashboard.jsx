@@ -15,6 +15,7 @@ const Dashboard = ({
   isLoading,
   sortConfig,
   onSort,
+  onSearch,
 }) => {
   // the setter is attached to delete button and addnewjobapp function bttn
   const [refreshKey, setRefreshKey] = useState(0); // this is to trigger refresh in benchmark bento through  setter which will get passed to table, then form
@@ -22,9 +23,9 @@ const Dashboard = ({
 
   return (
     <>
-      <div className="flex w-full p-4 gap-4 pt-18">
-        <div className="w-2/3">
-          <Search />
+      <div className="flex flex-col md:flex-row p-4 gap-4 pt-18">
+        <div className="w-full md:w-2/3 order-1 md:order-none">
+          <Search onSearch={onSearch} />
           <Table
             jobApps={jobApps}
             setJobApps={setJobApps}
@@ -40,7 +41,7 @@ const Dashboard = ({
             onApplicationSubmit={triggerRefresh}
           />
         </div>
-        <div className="w-1/3">
+        <div className="w-full md:w-1/3 order-2 md:order-none">
           <BenchmarksBentoBox refreshKey={refreshKey} />
         </div>
       </div>

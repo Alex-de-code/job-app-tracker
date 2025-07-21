@@ -54,23 +54,27 @@ const JobCard = ({ jobApps, onEdit, onDelete }) => {
               `Show me full detailed view for job application ${jobApp.id}`
             )
           }
-          className="hover:bg-slate-200 hover:border-y-0 hover:border-2 hover:border-slate-500"
+          className="hover:bg-slate-200  border-slate-200 border-t-2"
         >
           <td className="py-2 px-3 text-sm">{jobApp.companyTitle}</td>
           <td className="py-2 px-3 text-sm truncate">{jobApp.role}</td>
-          <td className="py-2 px-3 text-sm truncate">{jobApp.description}</td>
+          <td className="hidden lg:table-cell py-2 px-3 text-sm truncate">
+            {jobApp.description}
+          </td>
           {/* be cool for user to click on application status and toggle it that way or click through a slider animation */}
           <td className="py-2 px-3 text-sm">
             {" "}
             <div
-              className={`rounded-lg py-1 px-2 shadow hover:opacity-75 text-center ${
+              className={`inline-block md:w-full rounded-lg py-1 px-2 shadow text-center ${
                 getStatusTagColor(jobApp.status).backgroundColor
               }`}
             >
               {jobApp.status}
             </div>
           </td>
-          <td className="py-2 px-3 text-sm">{formatDate(jobApp.created_at)}</td>
+          <td className=" py-2 px-3 text-sm">
+            {formatDate(jobApp.created_at)}
+          </td>
           <td className="py-2 px-3">
             <div className="flex flex-row items-center">
               {" "}

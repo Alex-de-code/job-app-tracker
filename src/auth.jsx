@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "./supabase-client.js";
 import undraw_stepping from "./assets/undraw_stepping-up.svg";
 import { MdListAlt, MdInfo } from "react-icons/md";
+import { GiPieChart } from "react-icons/gi";
 
 // In the future should handle debugging vs. production more elegantly, could have a "dev" environment check that'll automatically filter off/on logic and logs for checking auth
 
@@ -146,17 +147,26 @@ const Auth = () => {
           <div className="md:w-1/3 w-1/2">
             <div className=" rounded-2xl flex justify-center">
               <span className="flex flex-row items-center">
-                <MdListAlt className="size-12 text-slate-400" />
-                <h3 className="text-3xl ml-2 my-5">JTrack</h3>
+                <GiPieChart className="size-12 text-slate-400" />
+                {/* <MdListAlt className="size-12 text-slate-400" /> */}
+                <h3 className="text-3xl ml-2 my-5">JTrax</h3>
               </span>
             </div>
-            <div className="  p-4 h-148 bg-slate-400 rounded-xl shadow-sm">
+            <div className="p-4 h-148 bg-slate-400 rounded-xl shadow-sm">
               <div className=" pt-8 pb-10">
-                <h2 className="text-xl text-slate-100 inline-block p-4 my-2 mx-12 border-2 border-slate-200 bg-slate-500 rounded-xl ">
-                  Welcome to JTrack, the{" "}
+                {/* <h2 className="text-xl text-slate-100 inline-block p-4 my-2 mx-12 border-2 border-slate-200 bg-slate-500 rounded-xl ">
+                  Welcome to JTrax, the{" "}
                   <span className="font-medium text-white">no-fuss</span> job
                   application organizer designed by job seekers, for job
                   seekers.
+                </h2> */}
+                <h2 className="text-xl text-slate-100 inline-block p-4 my-2 mx-12 border-2 border-slate-200 bg-slate-500 rounded-xl">
+                  Welcome to <strong>JTrax</strong>, the{" "}
+                  <span className="font-medium text-white">
+                    visual command center
+                  </span>{" "}
+                  for optimizing your job hunt—
+                  <span className="italic">see more, apply smarter</span>.
                 </h2>
               </div>
               <h4 className="px-24 text-2xl mb-5 text-slate-100">

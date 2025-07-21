@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { VscSignOut } from "react-icons/vsc";
 import { MdListAlt } from "react-icons/md";
 import { MdOutlineSettings } from "react-icons/md";
+import { GiPieChart } from "react-icons/gi";
 
 const Nav = ({ logout }) => {
   return (
@@ -12,13 +13,14 @@ const Nav = ({ logout }) => {
           <div className="flex flex-row items-center">
             <Link to={"/"} className=" rounded-xl flex justify-center">
               <span className="flex flex-row items-center text-white">
-                <MdListAlt className="size-7 text-white text-shadow-2xs" />
-                <h3 className="text-lg ml-1  text-shadow-2xs">JTrack</h3>
+                <GiPieChart className="size-7 text-white text-shadow-2xs" />
+                {/* <MdListAlt className="size-7 text-white text-shadow-2xs" /> */}
+                <h3 className="text-lg ml-1  text-shadow-2xs">JTrax</h3>
               </span>
             </Link>
 
             <div className="ml-auto flex items-center ">
-              <p className="text-white">Welcome, Tracker!</p>
+              <p className="text-white">Welcome, Traxers!</p>
               <Link
                 to={"/settings"}
                 className="p-1 rounded  hover:border-y-2
