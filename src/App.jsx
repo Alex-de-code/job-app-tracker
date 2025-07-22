@@ -27,50 +27,18 @@ function App() {
   //
 
   // We will memoize with useCallback so f(x) isn't rerendered unecessarily
-  const fetchJobApplications = useCallback(async () => {
-    if (!session?.user?.id) return; // Only fetch if user is logged in
-
-    setIsLoading(true);
-    try {
-      const { error, data, count } = await supabase
-        .from("job_applications") // from this table in Supabase backend
-        .select("*", { count: "exact" }) // select all  + --> this also gives a count for all job apps at bttm left of pagination component
-        .eq("user_id", session.user.id) // Only get current user's jobs
-        .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1) // gives range we need for pagination
-        .order(sortConfig.key, { ascending: sortConfig.direction === "asc" });
-      // .order("created_at"); // order based on creation time
-
-      if (error) throw error;
-
-      setJobApps(data || []);
-      setTotalItems(count || 0);
-    } catch (error) {
-      console.error("Error reading task: ", error.message);
-      return;
-    } finally {
-      setIsLoading(false);
-    }
-  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
   // const fetchJobApplications = useCallback(async () => {
-  //   if (!session?.user?.id) return;
+  //   if (!session?.user?.id) return; // Only fetch if user is logged in
 
   //   setIsLoading(true);
   //   try {
-  //     let query = supabase
-  //       .from("job_applications")
-  //       .select("*", { count: "exact" })
-  //       .eq("user_id", session.user.id)
-  //       .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1)
+  //     const { error, data, count } = await supabase
+  //       .from("job_applications") // from this table in Supabase backend
+  //       .select("*", { count: "exact" }) // select all  + --> this also gives a count for all job apps at bttm left of pagination component
+  //       .eq("user_id", session.user.id) // Only get current user's jobs
+  //       .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1) // gives range we need for pagination
   //       .order(sortConfig.key, { ascending: sortConfig.direction === "asc" });
-
-  //     // Add search filter if searchTerm exists
-  //     if (searchTerm) {
-  //       query = query.or(
-  //         `company_name.ilike.%${searchTerm}%,job_title.ilike.%${searchTerm}%`
-  //       );
-  //     }
-
-  //     const { error, data, count } = await query;
+  //     // .order("created_at"); // order based on creation time
 
   //     if (error) throw error;
 
@@ -82,7 +50,79 @@ function App() {
   //   } finally {
   //     setIsLoading(false);
   //   }
-  // }, [session?.user?.id, currentPage, itemsPerPage, sortConfig, searchTerm]); // Add searchTerm to dependencies
+  // }, [session?.user?.id, currentPage, itemsPerPage, sortConfig]);
+  /*
+  const fetchJobApplications = useCallback(async () => {
+    if (!session?.user?.id) return;
+
+    setIsLoading(true);
+    try {
+      let query = supabase
+        .from("job_applications")
+        .select("*", { count: "exact" })
+        .eq("user_id", session.user.id)
+        .range((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage - 1)
+        .order(sortConfig.key, { ascending: sortConfig.direction === "asc" });
+
+      // Add search filter if searchTerm exists
+      if (searchTerm) {
+        query = query.or(
+          `company_name.ilike.%${searchTerm}%,job_title.ilike.%${searchTerm}%`
+        );
+      }
+
+      const { error, data, count } = await query;
+
+      if (error) throw error;
+
+      setJobApps(data || []);
+      setTotalItems(count || 0);
+    } catch (error) {
+      console.error("Error reading task: ", error.message);
+      return;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig, searchTerm]); // Add searchTerm to dependencies
+*/
+
+  const fetchJobApplications = useCallback(async () => {
+    if (!session?.user?.id) return;
+
+    setIsLoading(true);
+    try {
+      let query = supabase
+        .from("job_applications")
+        .select("*", { count: "exact" })
+        .eq("user_id", session.user.id);
+
+      // Add text search filter (if searchTerm exists)
+      if (searchTerm?.trim()) {
+        const sanitizedTerm = searchTerm.replace(/[^\w\s-]/g, ""); // Remove special chars
+
+        query = query.or(
+          `companyTitle.ilike.%${sanitizedTerm}%,role.ilike.%${sanitizedTerm}%,status.ilike.%${sanitizedTerm}%`
+        );
+      }
+
+      // Add sorting and pagination
+      const { error, data, count } = await query
+        .order(sortConfig.key, { ascending: sortConfig.direction === "asc" })
+        .range(
+          (currentPage - 1) * itemsPerPage,
+          currentPage * itemsPerPage - 1
+        );
+
+      if (error) throw error;
+
+      setJobApps(data || []);
+      setTotalItems(count || 0);
+    } catch (error) {
+      console.error("Error fetching applications: ", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [session?.user?.id, currentPage, itemsPerPage, sortConfig, searchTerm]);
 
   // we will use useCallback to memoize, store a cache so that React can reuse the cached value instead of recalculating -- for the sake of impoving performance and not having alot of rerenders for this function
   // specifically useCallback is used to cache a function definition between re-renders
@@ -122,8 +162,6 @@ function App() {
     setSearchTerm(term);
     setCurrentPage(1); // Reset to first page on new searches
     await fetchJobApplications(); // Explicit fetch
-
-    // setCurrentPage(1); // Reset to first page when searching
   };
 
   useEffect(() => {

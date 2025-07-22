@@ -21,7 +21,7 @@ const Search = ({ onSearch }) => {
     <div>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-row items-center mb-3">
-          <div className="flex flex-row items-center rounded-lg mr-3 ml-11 md:ml-12.5 flex-1 bg-white shadow">
+          <div className="flex flex-row items-center rounded-lg mr-3 ml-11 md:ml-12.75 flex-1 bg-white shadow">
             <div className="ml-2 mr-2">
               <FaMagnifyingGlass className="text-black opacity-75" size={24} />
             </div>
@@ -30,7 +30,7 @@ const Search = ({ onSearch }) => {
               placeholder="Search jobs..."
               value={localSearchTerm}
               onChange={(e) => setLocalSearchTerm(e.target.value)}
-              className=" rounded-tr-lg rounded-br-lg p-2  w-full focus:outline-none"
+              className=" rounded-tr-lg rounded-br-lg p-2 w-full focus:outline-none"
             />
           </div>
           <div className="ml-auto">

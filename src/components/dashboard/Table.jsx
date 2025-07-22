@@ -9,6 +9,7 @@ import {
   PiClockClockwiseBold,
   PiClockCounterClockwiseBold,
 } from "react-icons/pi";
+import { MdOutlineRestartAlt } from "react-icons/md";
 
 const Table = ({
   jobApps,
@@ -183,35 +184,35 @@ const Table = ({
   return (
     <>
       <div className="flex">
-        <div className="flex flex-col gap-2 items-center">
-          <div className="mr-2">
+        <div className="flex flex-col gap-2 items-center mr-2">
+          <div className="">
             {/* this will open the form for users to input a new job application */}
             <button onClick={() => handleAddNew()}>
-              <MdAddBox className="text-black opacity-85 size-9 hover:opacity-75" />
+              <MdAddBox className="text-black opacity-85 size-9 hover:opacity-75 transition-all" />
             </button>
           </div>
-          <div className="mr-2">
+          <div className="">
             {/* sort buttons based on alphabetical order */}
             <button onClick={() => onSort("companyTitle")}>
               {sortConfig.key === "companyTitle" &&
               sortConfig.direction === "desc" ? (
-                <span className="flex flex-col items-center hover:opacity-75">
+                <span className="flex flex-col items-center hover:opacity-75 transition-all">
                   <RiSortAlphabetAsc className="text-black opacity-65 size-7 " />
                   <p className="hidden md:block text-xs font-medium text-gray-500">
-                    Descend
+                    Desc
                   </p>
                 </span>
               ) : (
-                <span className="flex flex-col items-center hover:opacity-75">
+                <span className="flex flex-col items-center hover:opacity-75 transition-all">
                   <RiSortAlphabetDesc className="text-black opacity-65 size-7 " />
                   <p className="hidden md:block  text-xs font-medium text-gray-500">
-                    Ascend
+                    Asc
                   </p>
                 </span>
               )}
             </button>
           </div>
-          <div className="mr-2">
+          <div className="">
             {/* sort buttons based on entry date */}
             <button
               onClick={() => onSort("created_at")}
@@ -219,20 +220,42 @@ const Table = ({
             >
               {sortConfig.key === "created_at" &&
               sortConfig.direction === "desc" ? (
-                <span className="flex flex-col items-center hover:opacity-75">
+                <span className="flex flex-col items-center hover:opacity-75 transition-all">
                   <PiClockClockwiseBold className="text-black opacity-65 size-6 " />
                   <p className="hidden md:block  text-xs font-medium text-gray-500">
                     Latest
                   </p>
                 </span>
               ) : (
-                <span className="flex flex-col items-center hover:opacity-75">
+                <span className="flex flex-col items-center hover:opacity-75 transition-all">
                   <PiClockCounterClockwiseBold className="text-black opacity-65 size-6 " />
                   <p className="hidden md:block  text-xs font-medium text-gray-500">
                     Earliest
                   </p>
                 </span>
               )}
+            </button>
+          </div>
+          {/* NEW: Reset Filters Button */}
+
+          <div className="">
+            <button
+              onClick={() => {
+                onSearch("");
+                onSort("created_at", "desc");
+              }}
+              className="flex items-center"
+            >
+              <span className="flex flex-col items-center hover:opacity-75 transition-all">
+                <MdOutlineRestartAlt
+                  className={`
+          text-black opacity-65 size-7 
+        `}
+                />
+                <p className="hidden md:block text-xs font-medium text-gray-500">
+                  Reset
+                </p>
+              </span>
             </button>
           </div>
         </div>
