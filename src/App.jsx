@@ -5,7 +5,10 @@ import Nav from "./components/Nav.jsx";
 import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Settings from "./components/Settings.jsx";
 import Auth from "./auth.jsx";
+import Footer from "./components/Footer.jsx";
 import "./App.css";
+
+const DEFAULT_SORT = { key: "created_at", direction: "desc" }; //used for SORTCONFIG
 
 function App() {
   const [session, setSession] = useState(null); // state for JWT access token + refresh token on user signin
@@ -19,7 +22,7 @@ function App() {
     const savedSort = localStorage.getItem("jobAppsSort");
     return savedSort
       ? JSON.parse(savedSort) // here we parse a JSON str & convert it to an obj
-      : { key: "created_at", direction: "desc" };
+      : DEFAULT_SORT;
   });
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -152,6 +155,18 @@ function App() {
     console.log(sortConfig);
   };
 
+  const resetSort = () => {
+    setSortConfig(DEFAULT_SORT);
+    setCurrentPage(1); // Reset to first page when changing sort
+    // The existing useEffect with [sortConfig] dependency will handle the refetch
+  };
+
+  const handleRefresh = () => {
+    setSearchTerm("");
+    setSortConfig(DEFAULT_SORT);
+    setCurrentPage(1);
+  };
+
   // itemsPerPage handler
   const handleItemsPerPageChange = (newSize) => {
     setItemsPerPage(newSize);
@@ -220,10 +235,10 @@ function App() {
 
   return (
     <>
-      <div className="min-h-screen bg-gray-200">
+      <div className="min-h-screen bg-gray-200 flex flex-col">
         {session ? (
           <>
-            <Nav logout={logout} />
+            <Nav logout={logout} user={session?.user} />
             <Routes>
               <Route
                 path="/"
@@ -240,12 +255,16 @@ function App() {
                     isLoading={isLoading}
                     sortConfig={sortConfig}
                     onSort={handleSort}
+                    onResetSort={resetSort}
+                    onRefresh={handleRefresh} // Add this
+                    defaultSort={DEFAULT_SORT}
                     onSearch={handleSearch}
                   />
                 }
               />
               <Route path="/settings" element={<Settings />} />
             </Routes>
+            <Footer />
           </>
         ) : (
           <Auth />

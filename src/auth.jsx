@@ -9,127 +9,211 @@ import { GiPieChart } from "react-icons/gi";
 // TODO: Clean up aesthetic of sign up sign in, doesn't feel quite right
 
 const Auth = () => {
+  // const [isSignUp, setIsSignUp] = useState(true);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+  // const [username, setUsername] = useState("");
+  // const [error, setError] = useState("");
+  // const [loading, setLoading] = useState(false); // adding loading state to prevent duplicate submissions
+  // const [needsVerification, setNeedsVerification] = useState(false); // state for verification banner aftr sign up
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   setLoading(true);
+
+  //   const { data: authData, error: authError } = isSignUp
+  //     ? await supabase.auth.signUp({ email, password })
+  //     : await supabase.auth.signInWithPassword({ email, password });
+
+  //   // Create public user record after successful signup
+  //   if (isSignUp && authData?.user) {
+  //     setNeedsVerification(true); // update verification banner state
+  //     // setError(`Verification email sent to ${email}. Please check your inbox.`);
+  //     // Create profile and goals in a transaction
+  //     const { error: dbError } = await supabase.from("users").insert({
+  //       id: authData.user.id,
+  //       email: authData.user.email,
+  //       created_at: new Date().toISOString(),
+  //     });
+
+  //     if (!dbError) {
+  //       // Create default goals
+  //       await supabase.from("user_goals").upsert(
+  //         {
+  //           id: authData.user.id,
+  //           weekly_target: 25,
+  //           daily_target: 5,
+  //           updated_at: new Date().toISOString(),
+  //         },
+  //         {
+  //           onConflict: "id",
+  //         }
+  //       );
+  //     }
+  //   }
+
+  //   setLoading(false);
+
+  //   if (authError) {
+  //     setError(authError.message);
+  //     console.error(authError);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   // Production: Keep listener but remove logs
+  //   const {
+  //     data: { subscription },
+  //   } = supabase.auth.onAuthStateChange((event, session) => {
+  //     // PROD: Silent handling
+  //     if (event === "SIGNED_OUT") {
+  //       // Clear user data
+  //     }
+  //   });
+
+  //   return () => subscription.unsubscribe();
+  // }, []);
+
   const [isSignUp, setIsSignUp] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // adding loading state to prevent duplicate submissions
-  const [needsVerification, setNeedsVerification] = useState(false); // state for verification banner aftr sign up
+  const [loading, setLoading] = useState(false);
+  const [needsVerification, setNeedsVerification] = useState(false);
+  const [usernameStatus, setUsernameStatus] = useState(""); // 'available', 'taken', 'checking', 'invalid'
 
+  // Validate username format (3-20 chars, letters, numbers, underscores)
+  const validateUsernameFormat = (username) => {
+    return /^[a-zA-Z0-9_]{3,20}$/.test(username);
+  };
+
+  // Check username availability
+  const checkUsernameAvailability = async (username) => {
+    if (!username || username.length < 3) {
+      setUsernameStatus("");
+      return false;
+    }
+
+    if (!validateUsernameFormat(username)) {
+      setUsernameStatus("invalid");
+      return false;
+    }
+
+    setUsernameStatus("checking");
+
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("username", username)
+        .maybeSingle();
+
+      if (error) throw error;
+
+      const available = !data;
+      setUsernameStatus(available ? "available" : "taken");
+      return available;
+    } catch (err) {
+      console.error("Username check error:", err);
+      setUsernameStatus("error");
+      return false;
+    }
+  };
+
+  // Real-time username validation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      checkUsernameAvailability(username);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [username]);
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // **** For PRODUCTION, comment out for debugging!!!
-    // --> --> --->
+    try {
+      if (isSignUp) {
+        // Validate username
+        if (!validateUsernameFormat(username)) {
+          throw new Error(
+            "Username must be 3-20 characters (letters, numbers, underscores)"
+          );
+        }
 
-    const { data: authData, error: authError } = isSignUp
-      ? await supabase.auth.signUp({ email, password })
-      : await supabase.auth.signInWithPassword({ email, password });
+        // Final availability check
+        const isAvailable = await checkUsernameAvailability(username);
+        if (!isAvailable) {
+          throw new Error(
+            usernameStatus === "taken"
+              ? "Username is already taken"
+              : "Could not verify username availability"
+          );
+        }
 
-    // ------------------------------------------------------------
-
-    //**** For DEBUGGING, comment this out for production!!!
-    // --> --> --->
-    // const { data: authData, error: authError } = isSignUp
-    //   ? await supabase.auth.signUp({ email, password })
-    //   : await supabase.auth.signInWithPassword({ email, password });
-
-    // console.log("Auth data:", authData); // For Debugging, Comment out for production!!!
-    // console.log("Auth error:", authError); // For Debugging, Comment out for production!!!
-
-    // const {
-    //   data: { session },
-    // } = await supabase.auth.getSession(); // For DEBUGGING, comment out for production
-    // console.log("Post-auth session:", session); // For DEBUGGING, comment out for production
-
-    // ---------------------------------------------------------
-
-    // Create public user record after successful signup
-    if (isSignUp && authData?.user) {
-      setNeedsVerification(true); // update verification banner state
-      // setError(`Verification email sent to ${email}. Please check your inbox.`);
-      // Create profile and goals in a transaction
-      const { error: dbError } = await supabase.from("users").insert({
-        id: authData.user.id,
-        email: authData.user.email,
-        created_at: new Date().toISOString(),
-      });
-
-      if (!dbError) {
-        // Create default goals
-        await supabase.from("user_goals").upsert(
+        // Sign up with Supabase Auth
+        const { data: authData, error: authError } = await supabase.auth.signUp(
           {
-            id: authData.user.id,
-            weekly_target: 25,
-            daily_target: 5,
-            updated_at: new Date().toISOString(),
-          },
-          {
-            onConflict: "id",
+            email,
+            password,
+            options: {
+              data: {
+                username, // Store in auth.user_metadata
+                email_verified: false,
+              },
+            },
           }
         );
+
+        if (authError) throw authError;
+
+        // Create profile in profiles table
+        const { error: profileError } = await supabase.from("profiles").upsert({
+          id: authData.user.id,
+          email,
+          username,
+          updated_at: new Date().toISOString(),
+        });
+
+        if (profileError) throw profileError;
+
+        setNeedsVerification(true);
+      } else {
+        // Sign in existing user
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        if (authError) throw authError;
       }
-    }
-
-    setLoading(false);
-
-    if (authError) {
-      setError(authError.message);
-      console.error(authError);
+    } catch (err) {
+      setError(err.message);
+      console.error("Auth error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  // **** For PRODUCTION only, comment out for debugging
-  // ---> -----> ---->
-
+  // Auth state listener
   useEffect(() => {
-    // Production: Keep listener but remove logs
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      // PROD: Silent handling
+    } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_OUT") {
-        // Clear user data
+        setUsername("");
+        setEmail("");
+        setPassword("");
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  //------------------------------------------------
-
-  // **** For DEBUGGING auth only, comment out for production
-  // ---> ---> --->
-  // useEffect(() => {
-  //   // check if a session exists
-  //   supabase.auth.getSession().then(({ data: { session } }) => {
-  //     console.log("CURRENT SESSION:", session);
-  //   });
-
-  //   //setup listener for all future auth changes
-  //   const {
-  //     data: { subscription },
-  //   } = supabase.auth.onAuthStateChange((event, session) => {
-  //     console.log("AUTH EVENT:", event, session);
-  //   });
-
-  //   return () => subscription.unsubscribe();
-  // }, []);
-
-  // useEffect(() => {
-  //   const check = async () => {
-  //     const {
-  //       data: { user },
-  //     } = await supabase.auth.getUser();
-  //     setNeedsVerification(user && !user.email_confirmed_at);
-  //   };
-  //   check();
-  // }, []);
-
-  // ---------------------------------------------------------------
   return (
     <>
       <div className="min-h-screen flex justify-center items-center">
@@ -180,6 +264,21 @@ const Auth = () => {
               )}
               <form onSubmit={handleSubmit} className="space-y-4 px-24">
                 <div className="flex flex-col">
+                  {isSignUp && (
+                    <input
+                      id="username"
+                      type="text"
+                      className="p-2 bg-slate-100 rounded-lg shadow-sm hover:bg-slate-200"
+                      placeholder="Choose a username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      required
+                      minLength={3}
+                      maxLength={20}
+                      pattern="[a-zA-Z0-9]+" // Only allow alphanumeric
+                      title="Letters and numbers only, no spaces"
+                    />
+                  )}
                   <input
                     id="email"
                     type="email"

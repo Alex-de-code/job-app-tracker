@@ -23,7 +23,10 @@ const Table = ({
   isLoading,
   sortConfig,
   onSort,
+  onResetSort,
+  defaultSort,
   onApplicationSubmit,
+  triggerRefresh,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -240,19 +243,19 @@ const Table = ({
 
           <div className="">
             <button
-              onClick={() => {
-                onSearch("");
-                onSort("created_at", "desc");
-              }}
+              onClick={() =>
+                //  onResetSort()
+                triggerRefresh()
+              }
               className="flex items-center"
             >
               <span className="flex flex-col items-center hover:opacity-75 transition-all">
                 <MdOutlineRestartAlt
                   className={`
-          text-black opacity-65 size-7 
+          text-blue-500 opacity-90 size-7 
         `}
                 />
-                <p className="hidden md:block text-xs font-medium text-gray-500">
+                <p className="hidden md:block text-xs font-medium text-blue-400">
                   Reset
                 </p>
               </span>

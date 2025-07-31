@@ -10,6 +10,7 @@ import {
   LabelList,
 } from "recharts";
 import { GiAchievement } from "react-icons/gi";
+import { PiEmpty } from "react-icons/pi";
 
 const BenchmarksBentoBox = ({ refreshKey }) => {
   const [weeklyGoal, setWeeklyGoal] = useState(25); // Default
@@ -315,44 +316,60 @@ const BenchmarksBentoBox = ({ refreshKey }) => {
             <div className="text-4xl font-bold text-emerald-600">32%</div> */}
           {/* </div> */}
           {/* </div> */}
-          <ResponsiveContainer width="100%" height="90%">
-            <PieChart
-              width={300}
-              height={230}
 
-              // margin={{ top: 10, right: 0, left: 50, bottom: 0 }}
-            >
-              <Pie
-                // activeIndex={this.state.activeIndex}
-                // activeShape={renderActiveShape}
-                data={distributionOfAllApps}
-                cx="49%"
-                cy="47%"
-                innerRadius={53}
-                outerRadius={70}
-                // fill="#8894d8"
-                // fill="ffffff"
-                dataKey="value"
-                paddingAngle={3}
-                strokeWidth={1}
-                // label={({ name, percent }) =>
-                //   `${(percent * 100).toFixed(0)}%`
-                // }
-                label
-                labelLine={{
-                  strokeWidth: 2,
-                  length: 10, // Shortens the label line
-                  lengthOuter: 1, // Controls how far the line extends beyond the pie
-                }}
-                // labelLine={false}
-              />
-              <Legend
-                layout="horizontal"
-                align="center"
-                verticalAlign="bottom"
-              />
-            </PieChart>
-          </ResponsiveContainer>
+          {distributionOfAllApps && distributionOfAllApps.acceptedlength > 0 ? (
+            <ResponsiveContainer width="100%" height="90%">
+              <PieChart
+                width={300}
+                height={230}
+
+                // margin={{ top: 10, right: 0, left: 50, bottom: 0 }}
+              >
+                <Pie
+                  // activeIndex={this.state.activeIndex}
+                  // activeShape={renderActiveShape}
+                  data={distributionOfAllApps}
+                  cx="49%"
+                  cy="47%"
+                  innerRadius={53}
+                  outerRadius={70}
+                  // fill="#8894d8"
+                  // fill="ffffff"
+                  dataKey="value"
+                  paddingAngle={3}
+                  strokeWidth={1}
+                  // label={({ name, percent }) =>
+                  //   `${(percent * 100).toFixed(0)}%`
+                  // }
+                  label
+                  labelLine={{
+                    strokeWidth: 2,
+                    length: 10, // Shortens the label line
+                    lengthOuter: 1, // Controls how far the line extends beyond the pie
+                  }}
+                  // labelLine={false}
+                />
+                <Legend
+                  layout="horizontal"
+                  align="center"
+                  verticalAlign="bottom"
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          ) : (
+            <>
+              <div className="flex justify-center p-10">
+                <div className="grid grid-rows-2 mt-8">
+                  <p className="row-span-1 text-gray-400 text-lg">
+                    No data available
+                  </p>
+                  <div className="flex justify-center">
+                    <PiEmpty size={30} className="row-span-1 text-gray-400" />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </>

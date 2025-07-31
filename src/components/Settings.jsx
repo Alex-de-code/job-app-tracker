@@ -99,7 +99,7 @@ const Settings = () => {
 
   return (
     <>
-      <div className="">
+      <div className="flex flex-col mb-auto">
         <div className="pt-18 px-10">
           <div className=" bg-white rounded-lg shadow-sm w-1/2 p-6">
             <h3 className="text-2xl">Settings</h3>

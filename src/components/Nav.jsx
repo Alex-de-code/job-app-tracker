@@ -4,7 +4,18 @@ import { MdListAlt } from "react-icons/md";
 import { MdOutlineSettings } from "react-icons/md";
 import { GiPieChart } from "react-icons/gi";
 
-const Nav = ({ logout }) => {
+const Nav = ({ logout, user }) => {
+  const getDisplayName = () => {
+    if (!user) return "Traxer";
+
+    return (
+      user.user_metadata?.full_name ||
+      user.user_metadata?.name ||
+      user.email?.split("@")[0] ||
+      "Traxer"
+    );
+  };
+
   return (
     <>
       <div className="fixed top-0 left-0 right-0">
@@ -19,7 +30,7 @@ const Nav = ({ logout }) => {
             </Link>
 
             <div className="ml-auto flex items-center ">
-              <p className="text-white">Welcome, Traxers!</p>
+              <p className="text-white"> Welcome, {getDisplayName()}!</p>
               <Link
                 to={"/settings"}
                 className="p-1 rounded  hover:border-y-2
